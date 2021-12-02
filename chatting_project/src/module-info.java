@@ -1,0 +1,2 @@
+module chatting_project {
+}
