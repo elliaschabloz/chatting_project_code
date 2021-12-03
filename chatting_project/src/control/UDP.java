@@ -11,7 +11,9 @@ public class UDP {
 		this.port = port;
 	}
 	
-	private UDPListener extends Thread{
+	private class UDPListener extends Thread{
+		userList usrList = new userList();
+		int BUFFER_SIZE = 80;
 		
 		// PARTIE RECEIVE MESSAGE 
 		DatagramSocket receiverSocket = new DatagramSocket(this.port);
