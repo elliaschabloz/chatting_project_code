@@ -22,6 +22,7 @@ public class UDP {
 		userList usrList = new userList();
 		int BUFFER_SIZE = 80;
 		
+		// PARTIE SEND MESSAGE EN BROADCAST 
 		DatagramSocket senderSocket = new DatagramSocket();
 		String msg = "Who's connected?";
 		byte[] data = msg.getBytes();
@@ -31,6 +32,8 @@ public class UDP {
 		senderSocket.send(datagramPacket);
 		senderSocket.close();
 		
+		
+		// PARTIE RECEIVE MESSAGE 
 		DatagramSocket receiverSocket = new DatagramSocket(this.port);
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		receiverSocket.receive(receiverPacket);
