@@ -22,6 +22,13 @@ public class MainWindow {
 		return unique;
 	}
 	
+	private void ChangePseudo(String NewPseudo){
+		boolean unique;
+		do{
+			unique = CheckPseudoUnicity(NewPseudo);
+		}while(!unique);
+	}
+	
 	public void SendMsgTo(String msg, String receiver) {
 		
 	}

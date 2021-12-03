@@ -13,4 +13,8 @@ public class userList {
 	public void append (String pseudo) {
 		this.append(pseudo);
 	}
+	
+	public void remove (String pseudo) {
+		this.remove(pseudo);
+	}
 }
