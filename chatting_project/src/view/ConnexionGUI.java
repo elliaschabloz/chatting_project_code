@@ -1,11 +1,17 @@
 package src.view;
+
+
 import javax.swing.*; 
 import src.model.*;
+import src.control.*;
 import java.awt.*;  
-import java.awt.event.*;  
+import java.awt.event.*;
+import java.io.IOException;  
 
 public class ConnexionGUI {
 	public ListUser listUser;
+	
+	
 	
 	public static void main(String[] args) {  
 		 JFrame f=new JFrame("CONNEXION");  
@@ -34,10 +40,17 @@ public class ConnexionGUI {
 	}
 
 	
-	public static void Connect(String pseudo) {
+	public static void Connect(String pseudo) throws IOException {
+		UDP udp = new UDP(2020);
+		udp.notifyConnection(pseudo);
+		
 	}
-	private boolean CheckPseudoUnicity(String pseudo) {
+	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
+		UDP udp=new UDP(2020);
+		userList AllConnectedUser = new userList();
+		AllConnectedUser = udp.getAllConnected(); 
+		check = AllConnectedUser.contains(pseudo);
 	    return check;
 	}
 	 
