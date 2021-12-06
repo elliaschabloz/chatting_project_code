@@ -16,11 +16,9 @@ public class ListUser {
 	//  On doit créer un thread qui sera en écoute permanenet pour mettre à jour 
 	//  la list des utilisateurs 
 	  private void updateListUser() {
+		  
+		  
 	  }
 	  
-	  public static void main(String args[]) {
-	  	
-	  	
-	  }
 
 }

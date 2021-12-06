@@ -1,2 +1,0 @@
-module chatting_project {
-}
