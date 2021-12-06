@@ -3,6 +3,7 @@ import model.*;
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 public class UDP {
 	int port;
@@ -69,17 +70,20 @@ public class UDP {
 		sendToAll("Who's connected?");
 			
 		// PARTIE RECEIVE MESSAGE 
-		DatagramSocket receiverSocket = new DatagramSocket(this.port);
-		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		receiverSocket.receive(receiverPacket);
+		final long timeout = System.currentTimeMillis() + 60000; //(60000 ms -> 1 minute)
 		
-		String rcv_msg = receiverPacket.getData().toString();
-		usrList.append(rcv_msg);
-		receiverSocket.close();
-		
+		if( System.currentTimeMillis() < timeout ) {
+			DatagramSocket receiverSocket = new DatagramSocket(this.port);
+			DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
+			receiverSocket.receive(receiverPacket);
+				
+			String rcv_msg = receiverPacket.getData().toString();
+			usrList.append(rcv_msg);
+			receiverSocket.close();
+		}
 		ListUser list = new ListUser(usrList);
 		list.updateListUser();
-		return usrList;
+		return list.ConnectedUsers;
 	}
 	
 	public void notifyConnection(String pseudo) throws IOException {
