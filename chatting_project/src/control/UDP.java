@@ -10,7 +10,7 @@ public class UDP {
 	public UDP(int port) {
 		this.port = port;
 	}
-	
+	/*
 	private UDPListener extends Thread{
 		
 		// PARTIE RECEIVE MESSAGE 
@@ -41,9 +41,9 @@ public class UDP {
 		receiverSocket.close();
 		
 	}
+	*/
 	
-	
-	private void sendToAll(String MsgToAll) {		
+	private void sendToAll(String MsgToAll) throws IOException {		
 		// PARTIE SEND MESSAGE EN BROADCAST 
 		DatagramSocket senderSocket = new DatagramSocket();
 		byte[] data = MsgToAll.getBytes();
@@ -60,41 +60,38 @@ public class UDP {
 	
 	
 	public userList getAllConnected() throws IOException {
-		TimerTask task = new TimerTask() {
-			public void run() {
 				
-			}
-		};
-		
 		userList usrList = new userList();
+		
 		int BUFFER_SIZE = 80;
 		
+		// PARTIE SEND MESSAGE
 		sendToAll("Who's connected?");
 			
 		// PARTIE RECEIVE MESSAGE 
 		DatagramSocket receiverSocket = new DatagramSocket(this.port);
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		receiverSocket.receive(receiverPacket);
-		data = receiverPacket.getData();
 		
-		String rcv_msg = data.toString();
+		String rcv_msg = receiverPacket.getData().toString();
 		usrList.append(rcv_msg);
 		receiverSocket.close();
 		
-		
+		ListUser list = new ListUser(usrList);
+		list.updateListUser();
 		return usrList;
 	}
 	
-	public void notifyConnection(String pseudo) {
+	public void notifyConnection(String pseudo) throws IOException {
 		sendToAll("Connection "+pseudo);
 		
 	}
 	
-	public void notifyDisconnection(String pseudo) {
+	public void notifyDisconnection(String pseudo) throws IOException {
 		sendToAll("Disconnection "+ pseudo);
 	}
 	
-	public void notifyChangedPseudo(String oldPseudo, String newPseudo) {
+	public void notifyChangedPseudo(String oldPseudo, String newPseudo) throws IOException {
 		sendToAll(oldPseudo+" changed to "+newPseudo);
 	}
 	

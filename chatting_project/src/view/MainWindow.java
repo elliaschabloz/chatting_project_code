@@ -1,6 +1,8 @@
 package view;
 import control.*;
 import model.*;
+
+import java.io.IOException;
 import java.util.*;
 
 
@@ -10,7 +12,7 @@ public class MainWindow {
 		
 	}
 	
-	private boolean CheckPseudoUnicity(String pseudo) {
+	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		//on doit récupérer les pseudos de tous les users connectés
 		//puis vérifier l'appartenance du pseudo à cette liste
 		boolean unique;
@@ -22,7 +24,7 @@ public class MainWindow {
 		return unique;
 	}
 	
-	private void ChangePseudo(String NewPseudo){
+	private void ChangePseudo(String NewPseudo) throws IOException{
 		boolean unique;
 		do{
 			unique = CheckPseudoUnicity(NewPseudo);
