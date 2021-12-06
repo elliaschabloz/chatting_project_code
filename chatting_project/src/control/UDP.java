@@ -80,7 +80,7 @@ public class UDP {
 			System.out.printf("b\n");
 			String rcv_msg = receiverPacket.getData().toString();
 			System.out.printf("c:%s\n",rcv_msg);
-			usrList.append(rcv_msg);
+			usrList.add(rcv_msg);
 			System.out.printf("coucou\n");
 		}
 		System.out.printf("timeout !\n");
