@@ -1,5 +1,5 @@
-package control;
-import model.*;
+package src.control;
+import src.model.*;
 import java.net.*;
 import java.io.*;
 import java.util.*;

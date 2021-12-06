@@ -1,4 +1,4 @@
-package model;
+package src.model;
 //import com.modeliosoft.modelio.javadesigner.annotations.objid;
 
 import java.io.IOException;

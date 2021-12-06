@@ -1,8 +1,10 @@
+package src;
+
 import java.io.IOException;
 
-import control.*;
-import model.*;
-import view.*;
+import src.control.*;
+import src.model.*;
+import src.view.*;
 
 
 public class Main {

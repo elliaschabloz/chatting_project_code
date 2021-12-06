@@ -1,5 +1,5 @@
-package control;
-import model.*;
+package src.control;
+import src.model.*;
 
 public class TCP {
 	int port;

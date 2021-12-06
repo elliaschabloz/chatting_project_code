@@ -1,6 +1,6 @@
-package view;
+package src.view;
 import javax.swing.*; 
-import model.*;
+import src.model.*;
 import java.awt.*;  
 import java.awt.event.*;  
 

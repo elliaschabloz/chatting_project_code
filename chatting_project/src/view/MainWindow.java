@@ -1,6 +1,6 @@
-package view;
-import control.*;
-import model.*;
+package src.view;
+import src.control.*;
+import src.model.*;
 
 import java.io.IOException;
 import java.util.*;
