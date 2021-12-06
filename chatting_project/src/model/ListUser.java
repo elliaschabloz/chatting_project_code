@@ -5,23 +5,28 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 
-public class ListUser implments Runnable {
+public class ListUser implements Runnable {
 
 	public userList ConnectedUsers;
-
-  public boolean isConnected(String pseudo) {
-  	boolean check = false;
-  	
-  	return check;
-  }
+	
+	public ListUser(userList list) {
+		this.ConnectedUsers = list;
+	}
+	
+	public boolean isConnected(String pseudo) {
+		boolean check = false;
+		check = this.ConnectedUsers.contains(pseudo);
+		return check;
+	}
 
 	//  On doit créer un thread qui sera en écoute permanenet pour mettre à jour 
 	//  la list des utilisateurs 
-  private void updateListUser() {
-		private DatagramSocket socket;
-		private boolean running;
-		private byte[] buf = new byte[256];
+	private void updateListUser() throws SocketException {
+		DatagramSocket socket;
+		boolean running;
+		byte[] buf = new byte[256];
 		  
 		socket = new DatagramSocket(2020);
 		
@@ -54,8 +59,13 @@ public class ListUser implments Runnable {
 		}
 		socket.close();
 	}
-  public void run() {
-	  updateListUser();
+	public void run() {
+	  try {
+		updateListUser();
+	} catch (SocketException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
 		  
 		  
