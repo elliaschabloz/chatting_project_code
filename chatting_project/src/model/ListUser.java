@@ -12,6 +12,7 @@ public class ListUser {
 
 	public boolean isConnected(String pseudo) {
 		boolean check = false;
+		check = this.ConnectedUsers.contains(pseudo);
 		return check;
 	}
 

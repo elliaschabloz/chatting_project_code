@@ -68,21 +68,25 @@ public class UDP {
 		
 		// PARTIE SEND MESSAGE
 		sendToAll("Who's connected?");
-			
+		System.out.printf("broadcast envoyé !\n");
 		// PARTIE RECEIVE MESSAGE 
-		final long timeout = System.currentTimeMillis() + 60000; //(60000 ms -> 1 minute)
+		final long timeout = System.currentTimeMillis() + 10000; //(60000 ms -> 1 minute)
+		DatagramSocket receiverSocket = new DatagramSocket(this.port);
+		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		
-		if( System.currentTimeMillis() < timeout ) {
-			DatagramSocket receiverSocket = new DatagramSocket(this.port);
-			DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
+		while( System.currentTimeMillis() < timeout ) {
+			System.out.printf("a\n");
 			receiverSocket.receive(receiverPacket);
-				
+			System.out.printf("b\n");
 			String rcv_msg = receiverPacket.getData().toString();
+			System.out.printf("c:%s\n",rcv_msg);
 			usrList.append(rcv_msg);
-			receiverSocket.close();
+			System.out.printf("coucou\n");
 		}
+		System.out.printf("timeout !\n");
+		receiverSocket.close();
 		ListUser list = new ListUser(usrList);
-		list.updateListUser();
+		//list.updateListUser();
 		return list.ConnectedUsers;
 	}
 	
