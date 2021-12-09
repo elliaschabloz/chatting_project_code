@@ -22,12 +22,11 @@ public class ConnexionGUI {
 		 JButton b=new JButton("Connect");
 		 tf.setText("Enter your Pseudo");
 		 b.setBounds(50,150,100,30);  
-		 
 		 b.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {  
 			        try{
 			        	//A voir 
-			        	
+
 			        	String enteredPseudo = tf.getText();
 			        	
 			        	if (CheckPseudoUnicity(enteredPseudo)) {
