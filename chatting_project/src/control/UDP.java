@@ -35,9 +35,8 @@ public class UDP implements Runnable  {
 		System.out.printf("broadcast envoyé!\n");
 		
 		// PARTIE RECEIVE MESSAGE 		
-		DatagramSocket receiverSocket = new DatagramSocket(this.port);
+		DatagramSocket receiverSocket = new DatagramSocket();			
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		
 		String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
         System.out.printf("msg recue :%s\n",rcv_msg);
 		usrList.add(rcv_msg);
