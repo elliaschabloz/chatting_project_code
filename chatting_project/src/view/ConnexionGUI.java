@@ -15,19 +15,34 @@ public class ConnexionGUI {
 	
 	public static void main(String[] args) {  
 		 JFrame f=new JFrame("CONNEXION");  
-		 JTextField tf=new JTextField();
+		 final JTextField tf=new JTextField();
 		 final JLabel l = new JLabel();
 		 tf.setBounds(50,50, 150,20); 
 		 l.setBounds(50,100, 150,20);  
-		 JButton b=new JButton("Connect");  
+		 JButton b=new JButton("Connect");
+		 tf.setText("Enter your Pseudo");
 		 b.setBounds(50,150,100,30);  
 		 
 		 b.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {  
-			        try{ 
-			        //Connect("ok");
-			        String reussite="Your are connected";  
-			        l.setText(reussite);
+			        try{
+			        	//A voir 
+			        	
+			        	String enteredPseudo = tf.getText();
+			        	
+			        	if (CheckPseudoUnicity(enteredPseudo)) {
+			        		//Add User to UseerList
+			        		Connect(enteredPseudo);
+			        		//Connect("ok");
+			        		String reussite="Your are connected";  
+					        l.setText(reussite);
+			        	}else {
+			        		//Retry enter pseudo
+			        		String reussite="Enter an Unused Pseudo ";  
+					        l.setText(reussite);
+			        	}
+			        
+			        
 			        }catch(Exception ex){System.out.println(ex);}  
 			    } 
 		 });
@@ -45,7 +60,7 @@ public class ConnexionGUI {
 		udp.notifyConnection(pseudo);
 		
 	}
-	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
+	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
 		UDP udp=new UDP(2020);
 		userList AllConnectedUser = new userList();
