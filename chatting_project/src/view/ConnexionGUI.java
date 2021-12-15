@@ -14,6 +14,9 @@ public class ConnexionGUI {
 	
 	
 	public static void main(String[] args) {  
+		 UDP udpListener = new UDP(2020);
+		
+		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
@@ -38,9 +41,6 @@ public class ConnexionGUI {
 			        		//Connect("ok");
 			        		String reussite="Your are connected as "+enteredPseudo;  
 			        		labelMessage.setText(reussite);
-			        		UDP udpListener = new UDP(2020);
-			        		
-			        		udpListener.run();
 			        	}else {
 			        		//Retry enter pseudo
 			        		String echec="Enter an Unused Pseudo ";  

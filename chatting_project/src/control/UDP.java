@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
-public class UDP implements Runnable  {
+public class UDP extends Thread  {
 	int port;
 	
 	public UDP(int port) {
@@ -21,28 +21,43 @@ public class UDP implements Runnable  {
 		datagramPacket.setPort(this.port);
 		senderSocket.send(datagramPacket);
 		System.out.println("Message envoyé : " + MsgToAll);
-		senderSocket.close();
 	}	
 	
 	public userList getAllConnected() throws IOException {
 				
 		userList usrList = new userList();
-		
-		int BUFFER_SIZE = 80;
-		
+		int BUFFER_SIZE = 300;
 		// PARTIE SEND MESSAGE
 		sendToAll("Who's connected?");
+		
 		System.out.printf("broadcast envoyé!\n");
 		
 		// PARTIE RECEIVE MESSAGE 		
 		DatagramSocket receiverSocket = new DatagramSocket();			
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
-        System.out.printf("msg recue :%s\n",rcv_msg);
-		usrList.add(rcv_msg);
-		System.out.printf("utilisateur ajouté à userlist !\n");
-		receiverSocket.close();
+		receiverSocket.setSoTimeout(3*1000);
 		ListUser list = new ListUser(usrList);
+		
+		while(true) {
+			try {
+				receiverSocket.receive(receiverPacket);
+				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
+				System.out.printf("receiverPacket :%s\n",receiverPacket.getData());
+		        System.out.printf("msg recue :%s\n",rcv_msg);
+		        System.out.printf("Liste User  ["+rcv_msg+"]\n");
+				usrList.add(rcv_msg);
+				System.out.printf("utilisateur ajouté à userlist !\n");
+				System.out.printf("utilisateur ajouté  ["+usrList+"]\n");
+				
+			}
+			catch(SocketTimeoutException e){
+				break;
+			}
+		}
+				
+		receiverSocket.close();
+
+		System.out.printf("Liste User  ["+list.ConnectedUsers+"]\n");
 		//list.updateListUser();
 		return list.ConnectedUsers;
 	}
@@ -77,12 +92,12 @@ public class UDP implements Runnable  {
 	public void run() {
 		userList list = new userList();
 		ListUser usrList = new ListUser(list);
-		try {
-			usrList.ConnectedUsers=getAllConnected();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			usrList.ConnectedUsers=getAllConnected();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		while(true) {
 			try {
 				usrList.updateListUser();
