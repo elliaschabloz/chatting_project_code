@@ -5,44 +5,12 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
-public class UDP {
+public class UDP extends Thread  {
 	int port;
 	
 	public UDP(int port) {
 		this.port = port;
 	}
-	/*
-	private UDPListener extends Thread{
-		
-		// PARTIE RECEIVE MESSAGE 
-		DatagramSocket receiverSocket = new DatagramSocket(this.port);
-		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		receiverSocket.receive(receiverPacket);
-		data = receiverPacket.getData();
-		
-		String rcv_msg = data.toString();
-		String token = rcv_msg.substring(0,4);
-		
-		if(token.equals("Conne")) {
-			//User Connected Add to user List
-			userList.append(rcv_msg.substring(10));
-			
-		}else if(token.equals("Disco")) {
-			//User Disconnected Remove from UserList
-			userList.remove(rcv_msg.substring(13));
-		
-		}else if(token.equals("Who's")) {
-			//Doit envoyer I am son pseudo au demandeur 
-			
-			
-		}else if(token.equals("I am ")) {
-			userList.append(rcv_msg.substring(5));
-		}
-		
-		receiverSocket.close();
-		
-	}
-	*/
 	
 	private void sendToAll(String MsgToAll) throws IOException {		
 		// PARTIE SEND MESSAGE EN BROADCAST 
@@ -52,28 +20,25 @@ public class UDP {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.port);
 		senderSocket.send(datagramPacket);
-		senderSocket.close();
-	}
-	
-	
-	
-	
-	
+		System.out.println("Message envoyé : " + MsgToAll);
+	}	
 	
 	public userList getAllConnected() throws IOException {
 				
 		userList usrList = new userList();
-		
-		int BUFFER_SIZE = 80;
-		
+		int BUFFER_SIZE = 300;
 		// PARTIE SEND MESSAGE
 		sendToAll("Who's connected?");
-		System.out.printf("broadcast envoyé !\n");
-		// PARTIE RECEIVE MESSAGE 
-		final long timeout = System.currentTimeMillis() + 10000; //(60000 ms -> 1 minute)
-		DatagramSocket receiverSocket = new DatagramSocket(this.port);
-		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		
+		System.out.printf("broadcast envoyé!\n");
+		
+		// PARTIE RECEIVE MESSAGE 		
+		DatagramSocket receiverSocket = new DatagramSocket();			
+		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
+		receiverSocket.setSoTimeout(3*1000);
+		ListUser list = new ListUser(usrList);
+		
+<<<<<<< HEAD
 		while( System.currentTimeMillis() < timeout ) {
 			//System.out.printf("a\n");
 			receiverSocket.receive(receiverPacket);
@@ -82,10 +47,28 @@ public class UDP {
 			//System.out.printf("c:%s\n",rcv_msg);
 			usrList.add(rcv_msg);
 			//System.out.printf("coucou\n");
+=======
+		while(true) {
+			try {
+				receiverSocket.receive(receiverPacket);
+				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
+				System.out.printf("receiverPacket :%s\n",receiverPacket.getData());
+		        System.out.printf("msg recue :%s\n",rcv_msg);
+		        System.out.printf("Liste User  ["+rcv_msg+"]\n");
+				usrList.add(rcv_msg);
+				System.out.printf("utilisateur ajouté à userlist !\n");
+				System.out.printf("utilisateur ajouté  ["+usrList+"]\n");
+				
+			}
+			catch(SocketTimeoutException e){
+				break;
+			}
+>>>>>>> b8c4828f70fd451a9b0d4d2775e901e90fbfe417
 		}
-		System.out.printf("timeout !\n");
+				
 		receiverSocket.close();
-		ListUser list = new ListUser(usrList);
+
+		System.out.printf("Liste User  ["+list.ConnectedUsers+"]\n");
 		//list.updateListUser();
 		return list.ConnectedUsers;
 	}
@@ -109,5 +92,32 @@ public class UDP {
 	
 	public msgList getHistory(int id1, int id2) {
 		return null;
+	}
+
+	@Override
+	
+	
+	
+	
+	
+	public void run() {
+		userList list = new userList();
+		ListUser usrList = new ListUser(list);
+//		try {
+//			usrList.ConnectedUsers=getAllConnected();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		while(true) {
+			try {
+				usrList.updateListUser();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// TODO Auto-generated method stub
+		
 	}
 }
