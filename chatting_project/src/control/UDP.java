@@ -7,12 +7,15 @@ import java.util.concurrent.TimeoutException;
 
 public class UDP extends Thread  {
 	int port;
-	String userPseudo;
+	public String userPseudo;
 	
 	public UDP(int port,String userPseudo) {
 		this.port = port;
 		this.userPseudo=userPseudo;
-		
+	}
+	
+	public void setPseudo(String pseudo) {
+		this.userPseudo=pseudo;
 	}
 	
 	private void sendToAll(String MsgToAll) throws IOException {		
@@ -54,8 +57,8 @@ public class UDP extends Thread  {
 				Socket.receive(receiverPacket);
 				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 		        System.out.printf("msg recue :%s\n",rcv_msg);
-		        System.out.printf("Liste User  ["+rcv_msg+"]\n");
-				usrList.add(rcv_msg);
+		        System.out.printf("Liste User "+rcv_msg+"\n");
+				usrList.add(rcv_msg.substring(5));
 				System.out.printf("utilisateur ajouté "+usrList+"\n");
 				
 			}

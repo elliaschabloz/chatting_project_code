@@ -14,7 +14,7 @@ public class ConnexionGUI {
 	
 	
 	public static void main(String[] args) {  
-		 UDP udpListener = new UDP(5555,null);
+		 final UDP udpListener = new UDP(5555,null);
 		
 		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
@@ -34,6 +34,7 @@ public class ConnexionGUI {
 			        	//A voir 
 
 			        	String enteredPseudo = tf.getText();
+			        	udpListener.setPseudo(enteredPseudo);
 			        	
 			        	if (!CheckPseudoUnicity(enteredPseudo)) {
 			        		//Add User to UseerList

@@ -18,7 +18,7 @@ public class MainWindow {
 		//on doit récupérer les pseudos de tous les users connectés
 		//puis vérifier l'appartenance du pseudo à cette liste
 		boolean unique;
-		UDP udp = new UDP(2525);
+		UDP udp = new UDP(2525,null);
 		userList allConnected = udp.getAllConnected();
 		if (allConnected.contains(pseudo)) {
 			unique = false;
