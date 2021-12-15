@@ -7,20 +7,25 @@ import java.util.concurrent.TimeoutException;
 
 public class UDP extends Thread  {
 	int port;
+	String userPseudo;
 	
-	public UDP(int port) {
+	public UDP(int port,String userPseudo) {
 		this.port = port;
+		this.userPseudo=userPseudo;
+		
 	}
 	
 	private void sendToAll(String MsgToAll) throws IOException {		
 		// PARTIE SEND MESSAGE EN BROADCAST 
 		DatagramSocket senderSocket = new DatagramSocket();
+		System.out.printf("socket :"+senderSocket.getLocalPort()+" \n");
 		byte[] data = MsgToAll.getBytes();
 		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.port);
 		senderSocket.send(datagramPacket);
-		System.out.println("Message envoyé : " + MsgToAll);
+		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.port);
+		senderSocket.close();
 	}	
 	
 	public userList getAllConnected() throws IOException {
@@ -28,14 +33,20 @@ public class UDP extends Thread  {
 		userList usrList = new userList();
 		int BUFFER_SIZE = 300;
 		// PARTIE SEND MESSAGE
-		sendToAll("Who's connected?");
+		String MsgToAll="Who's connected?";
 		
-		System.out.printf("broadcast envoyé!\n");
+		DatagramSocket Socket = new DatagramSocket();
+		System.out.printf("socket :"+Socket.getLocalPort()+" \n");
+		byte[] data = MsgToAll.getBytes();
+		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
+		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
+		datagramPacket.setPort(this.port);
+		Socket.send(datagramPacket);
+		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.port);
 		
 		// PARTIE RECEIVE MESSAGE 		
-		DatagramSocket receiverSocket = new DatagramSocket();			
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		receiverSocket.setSoTimeout(3*1000);
+		Socket.setSoTimeout(3*1000);
 		ListUser list = new ListUser(usrList);
 		
 <<<<<<< HEAD
@@ -50,14 +61,12 @@ public class UDP extends Thread  {
 =======
 		while(true) {
 			try {
-				receiverSocket.receive(receiverPacket);
+				Socket.receive(receiverPacket);
 				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
-				System.out.printf("receiverPacket :%s\n",receiverPacket.getData());
 		        System.out.printf("msg recue :%s\n",rcv_msg);
 		        System.out.printf("Liste User  ["+rcv_msg+"]\n");
 				usrList.add(rcv_msg);
-				System.out.printf("utilisateur ajouté à userlist !\n");
-				System.out.printf("utilisateur ajouté  ["+usrList+"]\n");
+				System.out.printf("utilisateur ajouté "+usrList+"\n");
 				
 			}
 			catch(SocketTimeoutException e){
@@ -66,7 +75,7 @@ public class UDP extends Thread  {
 >>>>>>> b8c4828f70fd451a9b0d4d2775e901e90fbfe417
 		}
 				
-		receiverSocket.close();
+		Socket.close();
 
 		System.out.printf("Liste User  ["+list.ConnectedUsers+"]\n");
 		//list.updateListUser();
@@ -111,7 +120,7 @@ public class UDP extends Thread  {
 //		}
 		while(true) {
 			try {
-				usrList.updateListUser();
+				usrList.updateListUser(userPseudo);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
