@@ -75,13 +75,13 @@ public class UDP {
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		
 		while( System.currentTimeMillis() < timeout ) {
-			System.out.printf("a\n");
+			//System.out.printf("a\n");
 			receiverSocket.receive(receiverPacket);
-			System.out.printf("b\n");
+			//System.out.printf("b\n");
 			String rcv_msg = receiverPacket.getData().toString();
-			System.out.printf("c:%s\n",rcv_msg);
+			//System.out.printf("c:%s\n",rcv_msg);
 			usrList.add(rcv_msg);
-			System.out.printf("coucou\n");
+			//System.out.printf("coucou\n");
 		}
 		System.out.printf("timeout !\n");
 		receiverSocket.close();
