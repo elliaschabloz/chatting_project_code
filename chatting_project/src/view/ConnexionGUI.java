@@ -14,7 +14,7 @@ public class ConnexionGUI {
 	
 	
 	public static void main(String[] args) {  
-		 UDP udpListener = new UDP(2020);
+		 UDP udpListener = new UDP(5555,null);
 		
 		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
@@ -61,13 +61,13 @@ public class ConnexionGUI {
 
 	
 	public static void Connect(String pseudo) throws IOException {
-		UDP udp = new UDP(2020);
+		UDP udp = new UDP(2020,pseudo);
 		udp.notifyConnection(pseudo);
 		
 	}
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
-		UDP udp=new UDP(2020);
+		UDP udp=new UDP(2020,pseudo);
 		userList AllConnectedUser = new userList();
 		AllConnectedUser = udp.getAllConnected(); 
 		check = AllConnectedUser.contains(pseudo);
