@@ -48,17 +48,7 @@ public class UDP extends Thread  {
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		Socket.setSoTimeout(3*1000);
 		ListUser list = new ListUser(usrList);
-		
-<<<<<<< HEAD
-		while( System.currentTimeMillis() < timeout ) {
-			//System.out.printf("a\n");
-			receiverSocket.receive(receiverPacket);
-			//System.out.printf("b\n");
-			String rcv_msg = receiverPacket.getData().toString();
-			//System.out.printf("c:%s\n",rcv_msg);
-			usrList.add(rcv_msg);
-			//System.out.printf("coucou\n");
-=======
+
 		while(true) {
 			try {
 				Socket.receive(receiverPacket);
@@ -72,7 +62,6 @@ public class UDP extends Thread  {
 			catch(SocketTimeoutException e){
 				break;
 			}
->>>>>>> b8c4828f70fd451a9b0d4d2775e901e90fbfe417
 		}
 				
 		Socket.close();
