@@ -8,10 +8,12 @@ import java.util.concurrent.TimeoutException;
 public class UDP extends Thread  {
 	int port;
 	public String userPseudo;
+	public userList L;
 	
 	public UDP(int port,String userPseudo) {
 		this.port = port;
 		this.userPseudo=userPseudo;
+		this.L = null;
 	}
 	
 	public void setPseudo(String pseudo) {
@@ -65,7 +67,6 @@ public class UDP extends Thread  {
 		}
 				
 		Socket.close();
-
 		System.out.printf("Liste User "+list.ConnectedUsers+"\n");
 		//list.updateListUser();
 		return list.ConnectedUsers;
