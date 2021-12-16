@@ -21,7 +21,6 @@ public class UDP extends Thread  {
 	private void sendToAll(String MsgToAll) throws IOException {		
 		// PARTIE SEND MESSAGE EN BROADCAST 
 		DatagramSocket senderSocket = new DatagramSocket();
-		System.out.printf("socket :"+senderSocket.getLocalPort()+" \n");
 		byte[] data = MsgToAll.getBytes();
 		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
@@ -37,7 +36,6 @@ public class UDP extends Thread  {
 		int BUFFER_SIZE = 300;
 		// PARTIE SEND MESSAGE
 		String MsgToAll="Who's connected?";
-		
 		DatagramSocket Socket = new DatagramSocket();
 		System.out.printf("socket :"+Socket.getLocalPort()+" \n");
 		byte[] data = MsgToAll.getBytes();
@@ -49,7 +47,7 @@ public class UDP extends Thread  {
 		
 		// PARTIE RECEIVE MESSAGE 		
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-		Socket.setSoTimeout(3*1000);
+		Socket.setSoTimeout(2*1000);
 		ListUser list = new ListUser(usrList);
 
 		while(true) {
@@ -57,7 +55,6 @@ public class UDP extends Thread  {
 				Socket.receive(receiverPacket);
 				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 		        System.out.printf("msg recue :%s\n",rcv_msg);
-		        System.out.printf("Liste User "+rcv_msg+"\n");
 				usrList.add(rcv_msg.substring(5));
 				System.out.printf("utilisateur ajouté "+usrList+"\n");
 				
@@ -69,7 +66,7 @@ public class UDP extends Thread  {
 				
 		Socket.close();
 
-		System.out.printf("Liste User  ["+list.ConnectedUsers+"]\n");
+		System.out.printf("Liste User "+list.ConnectedUsers+"\n");
 		//list.updateListUser();
 		return list.ConnectedUsers;
 	}
@@ -98,18 +95,10 @@ public class UDP extends Thread  {
 	@Override
 	
 	
-	
-	
-	
 	public void run() {
 		userList list = new userList();
 		ListUser usrList = new ListUser(list);
-//		try {
-//			usrList.ConnectedUsers=getAllConnected();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		while(true) {
 			try {
 				usrList.updateListUser(userPseudo);
