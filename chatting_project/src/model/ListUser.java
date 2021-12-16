@@ -31,17 +31,16 @@ public class ListUser{
 		DatagramSocket socket ;
 		socket = new DatagramSocket(null);
 		socket.bind(new InetSocketAddress(portListener));
-		System.out.printf("socket :"+socket.getLocalPort()+" \n");
+		System.out.printf("écoute sur la socket :"+socket.getLocalPort()+" \n");
 		
 		int BUFFER_SIZE = 300;
 
-		System.out.printf("wainting message\n");
+		System.out.printf("wainting for message\n");
 		DatagramPacket received_Packet = new DatagramPacket(new byte[BUFFER_SIZE],BUFFER_SIZE);
 		socket.receive(received_Packet);
 		String rcv_msg = new String(received_Packet.getData(), 0, received_Packet.getLength());
 		System.out.printf("message received : "+rcv_msg+"\n");
 		String token = rcv_msg.substring(0,4);
-		System.out.printf("Token is : "+token+"\n");
 		
 		if(token.equals("Conn")) {
 			//User Connected Add to user List
@@ -50,8 +49,7 @@ public class ListUser{
 			//User Disconnected Remove from UserList
 			this.ConnectedUsers.remove(rcv_msg.substring(13));
 		}else if(token.equals("Who'")) {
-			//Doit envoyer I am son pseudo au demandeur
-			
+			//User Used a broadcast have to respond
 			byte[] msg_buff = ("I am "+userPseudo).getBytes();
 			InetAddress target_Address = received_Packet.getAddress();
 			int target_Port = received_Packet.getPort();
@@ -63,8 +61,6 @@ public class ListUser{
 			this.ConnectedUsers.add(rcv_msg.substring(5));
 		}
 		socket.close();
-		
-		
 	}
 }
 	  
