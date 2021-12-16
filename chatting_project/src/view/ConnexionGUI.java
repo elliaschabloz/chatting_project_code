@@ -15,8 +15,8 @@ public class ConnexionGUI {
 	
 	public static void main(String[] args) {  
 		 final UDP udpListener = new UDP(5555,null);
-		
-		 
+
+//		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
@@ -48,7 +48,7 @@ public class ConnexionGUI {
 			        		String echec="Enter an Unused Pseudo ";  
 			        		labelMessage.setText(echec);
 			        	}
-			        
+			        	
 			        
 			        }catch(Exception ex){System.out.println(ex);}  
 			    } 
