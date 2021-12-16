@@ -13,10 +13,10 @@ public class ConnexionGUI {
 	
 	
 	
-	public static void main(String[] args) {  
-		 final UDP udpListener = new UDP(5555,null);
-		
-		 udpListener.start();
+	public static void main(String[] args) {
+		 final UDP udpListener = new UDP(2020,null);
+
+//		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
@@ -26,8 +26,9 @@ public class ConnexionGUI {
 		 labelMessage.setBounds(55,180, 250,20);  
 		 labelPseudo.setText("Pseudo :");
 		 JButton b=new JButton("Connect");
+		 JButton b2=new JButton("Disconnect");
 		 tf.setText("Enter your Pseudo");
-		 b.setBounds(150,220,100,30);  
+		 b.setBounds(150,220,100,30);
 		 b.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {  
 			        try{
@@ -39,6 +40,7 @@ public class ConnexionGUI {
 			        	if (!CheckPseudoUnicity(enteredPseudo)) {
 			        		//Add User to UseerList
 			        		Connect(enteredPseudo);
+			        		udpListener.start();
 			        		//Connect("ok");
 			        		String reussite="Your are connected as "+enteredPseudo;  
 			        		labelMessage.setText(reussite);
@@ -52,8 +54,22 @@ public class ConnexionGUI {
 			        }catch(Exception ex){System.out.println(ex);}  
 			    } 
 		 });
-		 
-		 f.add(b);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
+		 b2.setBounds(150,260,100,30);
+		 b2.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+				 String enteredPseudo = tf.getText();
+				 try {
+					Disconnect(enteredPseudo);
+					String deco="Your are disconnected !";  
+	        		labelMessage.setText(deco);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				 
+			 }
+		 });
+		 f.add(b);f.add(b2);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
 		 f.setSize(400,400);  
 		 f.setLayout(null);  
 		 f.setVisible(true); 
@@ -66,12 +82,22 @@ public class ConnexionGUI {
 		udp.notifyConnection(pseudo);
 		
 	}
+	public static void Disconnect(String pseudo) throws IOException {
+		UDP udp = new UDP(2020,pseudo);
+		udp.L = null;
+		udp.notifyDisconnection(pseudo);
+		
+	}
+	
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
 		UDP udp=new UDP(2020,pseudo);
-		userList AllConnectedUser = new userList();
-		AllConnectedUser = udp.getAllConnected(); 
-		check = AllConnectedUser.contains(pseudo);
+		udp.L = new userList();
+		//userList AllConnectedUser = new userList();
+		//AllConnectedUser = udp.getAllConnected(); 
+		//check = AllConnectedUser.contains(pseudo);
+		udp.L = udp.getAllConnected(); 
+		check = (udp.L).contains(pseudo);
 		System.out.printf("Valeur de checkUnicity : "+check+"\n");
 	    return check;
 	}
