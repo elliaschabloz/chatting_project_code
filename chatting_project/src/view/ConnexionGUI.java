@@ -16,7 +16,7 @@ public class ConnexionGUI {
 	public static void main(String[] args) {  
 		 final UDP udpListener = new UDP(5555,null);
 		
-//		 udpListener.start();
+		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
@@ -39,7 +39,6 @@ public class ConnexionGUI {
 			        	if (!CheckPseudoUnicity(enteredPseudo)) {
 			        		//Add User to UseerList
 			        		Connect(enteredPseudo);
-			        		udpListener.start();
 			        		//Connect("ok");
 			        		String reussite="Your are connected as "+enteredPseudo;  
 			        		labelMessage.setText(reussite);
@@ -48,7 +47,7 @@ public class ConnexionGUI {
 			        		String echec="Enter an Unused Pseudo ";  
 			        		labelMessage.setText(echec);
 			        	}
-			        	
+			        
 			        
 			        }catch(Exception ex){System.out.println(ex);}  
 			    } 
