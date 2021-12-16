@@ -98,10 +98,19 @@ public class UDP extends Thread  {
 	public void run() {
 		userList list = new userList();
 		ListUser usrList = new ListUser(list);
+		int portListener = 2020;
+		DatagramSocket socket = null;
+		try {
+			socket = new DatagramSocket(portListener);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.printf("écoute sur la socket :"+socket.getLocalPort()+" \n");
 
 		while(true) {
 			try {
-				usrList.updateListUser(userPseudo);
+				usrList.updateListUser(socket,userPseudo);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

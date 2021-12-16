@@ -26,12 +26,12 @@ public class ListUser{
 	//  On doit créer un thread qui sera en écoute permanenet pour mettre à jour 
 	//  la list des utilisateurs 
 	@SuppressWarnings("resource")
-	public void updateListUser(String userPseudo) throws IOException {
-		int portListener = 2020;
-		DatagramSocket socket ;
-		socket = new DatagramSocket(null);
-		socket.bind(new InetSocketAddress(portListener));
-		System.out.printf("écoute sur la socket :"+socket.getLocalPort()+" \n");
+	public void updateListUser(DatagramSocket socket,String userPseudo) throws IOException {
+//		int portListener = 2020;
+//		DatagramSocket socket ;
+//		socket = new DatagramSocket(null);
+//		socket.bind(new InetSocketAddress(portListener));
+//		System.out.printf("écoute sur la socket :"+socket.getLocalPort()+" \n");
 		
 		int BUFFER_SIZE = 300;
 
@@ -60,7 +60,6 @@ public class ListUser{
 		}else if(token.equals("I am")) {
 			this.ConnectedUsers.add(rcv_msg.substring(5));
 		}
-		socket.close();
 	}
 }
 	  
