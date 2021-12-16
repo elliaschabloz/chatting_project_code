@@ -8,7 +8,7 @@ import java.util.concurrent.TimeoutException;
 public class UDP extends Thread  {
 	int port;
 	public String userPseudo;
-	public userList L;
+	public ListUser L;
 	
 	public UDP(int port,String userPseudo) {
 		this.port = port;
@@ -32,9 +32,9 @@ public class UDP extends Thread  {
 		senderSocket.close();
 	}	
 	
-	public userList getAllConnected() throws IOException {
+	public ListUser getAllConnected() throws IOException {
 				
-		userList usrList = new userList();
+		
 		int BUFFER_SIZE = 300;
 		// PARTIE SEND MESSAGE
 		String MsgToAll="Who's connected?";
@@ -45,20 +45,20 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.port);
 		Socket.send(datagramPacket);
-		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.port);
+		System.out.println("Message envoyé : " + MsgToAll +" vers le port "+this.port);
 		
 		// PARTIE RECEIVE MESSAGE 		
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		Socket.setSoTimeout(2*1000);
-		ListUser list = new ListUser(usrList);
+		//ListUser list = new ListUser(usrList);
 
 		while(true) {
 			try {
 				Socket.receive(receiverPacket);
 				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 		        System.out.printf("msg recue :%s\n",rcv_msg);
-				usrList.add(rcv_msg.substring(5));
-				System.out.printf("utilisateur ajouté "+usrList+"\n");
+				(this.L).add(rcv_msg.substring(5));
+				System.out.printf("utilisateur ajouté "+this.L+"\n");
 				
 			}
 			catch(SocketTimeoutException e){
@@ -67,9 +67,9 @@ public class UDP extends Thread  {
 		}
 				
 		Socket.close();
-		System.out.printf("Liste User "+list.ConnectedUsers+"\n");
+		System.out.printf("Liste User Initiale "+(this.L)+"\n");
 		//list.updateListUser();
-		return list.ConnectedUsers;
+		return this.L;
 	}
 	
 	public void notifyConnection(String pseudo) throws IOException {
@@ -97,8 +97,9 @@ public class UDP extends Thread  {
 	
 	
 	public void run() {
-		userList list = new userList();
-		ListUser usrList = new ListUser(list);
+		//userList list = new userList();
+		//ListUser usrList = new ListUser(list);
+		ListUser usrList = new ListUser();
 		int portListener = 2020;
 		DatagramSocket socket = null;
 		try {
@@ -107,7 +108,7 @@ public class UDP extends Thread  {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.out.printf("écoute sur la socket :"+socket.getLocalPort()+" \n");
+		System.out.printf("Début de l'écoute sur la socket : "+socket.getLocalPort()+" \n");
 
 		while(true) {
 			try {

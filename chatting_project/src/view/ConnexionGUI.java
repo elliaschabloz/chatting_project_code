@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.io.IOException;  
 
 public class ConnexionGUI {
-	public ListUser listUser;
+	//public ListUser listUser;
 	
 	
 	
@@ -30,8 +30,16 @@ public class ConnexionGUI {
 		 tf.setText("Enter your Pseudo");
 		 b.setBounds(150,220,100,30);
 		 b.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {  
-			        try{
+			 public void actionPerformed(ActionEvent e) {
+				 String text = "";
+				 try {
+					text = Connect(tf.getText());
+					udpListener.start();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				 labelMessage.setText(text);
+			        /*try{
 			        	//A voir 
 
 			        	String enteredPseudo = tf.getText();
@@ -51,8 +59,8 @@ public class ConnexionGUI {
 			        	}
 			        	
 			        
-			        }catch(Exception ex){System.out.println(ex);}  
-			    } 
+			        }catch(Exception ex){System.out.println(ex);}  */
+			    }
 		 });
 		 b2.setBounds(150,260,100,30);
 		 b2.addActionListener(new ActionListener() {
@@ -77,14 +85,29 @@ public class ConnexionGUI {
 	}
 
 	
-	public static void Connect(String pseudo) throws IOException {
-		UDP udp = new UDP(2020,pseudo);
-		udp.notifyConnection(pseudo);
-		
+	public static String Connect(String pseudo) throws IOException {
+		UDP udpConnect = new UDP(2020,pseudo);
+		String retour = "";
+		try{
+        	
+        	if (!CheckPseudoUnicity(pseudo)) {
+        		//Add User to UseerList
+        		udpConnect.notifyConnection(pseudo);
+        		retour = "You are connected as : " + pseudo;
+        		//Connect("ok");
+        	}else {
+        		//Retry enter pseudo
+        		retour ="Enter an Unused Pseudo ";
+        	}
+        }catch(Exception ex){System.out.println(ex);}
+		return retour;
 	}
+	
 	public static void Disconnect(String pseudo) throws IOException {
 		UDP udp = new UDP(2020,pseudo);
-		udp.L = null;
+		if (udp.L!= null) {
+			udp.L.clear();
+		}
 		udp.notifyDisconnection(pseudo);
 		
 	}
@@ -92,13 +115,13 @@ public class ConnexionGUI {
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
 		UDP udp=new UDP(2020,pseudo);
-		udp.L = new userList();
+		udp.L = new ListUser();
 		//userList AllConnectedUser = new userList();
 		//AllConnectedUser = udp.getAllConnected(); 
 		//check = AllConnectedUser.contains(pseudo);
 		udp.L = udp.getAllConnected(); 
 		check = (udp.L).contains(pseudo);
-		System.out.printf("Valeur de checkUnicity : "+check+"\n");
+		System.out.printf("Pseudo unique : "+ !check +"\n");
 	    return check;
 	}
 	 
