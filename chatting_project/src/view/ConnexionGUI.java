@@ -6,17 +6,21 @@ import src.model.*;
 import src.control.*;
 import java.awt.*;  
 import java.awt.event.*;
-import java.io.IOException;  
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;  
 
 public class ConnexionGUI {
 	//public ListUser listUser;
 	static UDP udpListener = new UDP(2020,null);
 	
 	
-
-	public static void main(String[] args) {
-		 final UDP udpListener = new UDP(2020,null);
-//		 udpListener.start();
+	public static void main(String[] args) {  
+		 //final UDP udpListener = new UDP(2020,null);
+		//		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();

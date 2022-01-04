@@ -54,9 +54,11 @@ public class UDP extends Thread  {
 		senderSocket.close();
 	}	
 	
+	
 	public ArrayList<String> getAllConnected() throws IOException {				
 		
 		// PARTIE SEND MESSAGE	
+		//int BUFFER_SIZE = 300;
 		DatagramSocket Socket = new DatagramSocket(2020);
 		byte[] data = ("Who is connected ?").getBytes();
 		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
@@ -64,11 +66,9 @@ public class UDP extends Thread  {
 		datagramPacket.setPort(this.udpPort);
 		Socket.send(datagramPacket);
 		System.out.println("Message envoyé : " + "Who is connected ?" +" sur le port "+this.udpPort);
-		
+		//NetworkInterface.getI
 		// PARTIE RECEIVE MESSAGE
-
 		int BUFFER_SIZE = 300;
-
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		Socket.setSoTimeout(2*1000);
 		
@@ -76,8 +76,9 @@ public class UDP extends Thread  {
 			try {
 				System.out.println("dans le try");
 				Socket.receive(receiverPacket);
+				System.out.println("remoteIP="+NetworkInterface.getByInetAddress(receiverPacket.getAddress()));
 				
-				if( !(receiverPacket.getAddress().getHostAddress()).equals(InetAddress.getLocalHost().getHostAddress()) ) {
+				if( NetworkInterface.getByInetAddress(receiverPacket.getAddress()) == null) {
 					String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 			        System.out.printf("msg recu :%s\n",rcv_msg);
 					(this.connectedUsers).add(rcv_msg.substring(5));
@@ -132,7 +133,10 @@ public class UDP extends Thread  {
 		
 		String token = rcv_msg.substring(0,4);
 		
-		if( !(received_Packet.getAddress().getHostAddress()).equals(InetAddress.getLocalHost().getHostAddress()) ) {
+		//System.out.println("LocalAdd : " + InetAddress.getLocalHost().getHostAddress());
+		//System.out.println("InetAdd : " + received_Packet.getAddress().getHostAddress() );
+		
+		if(NetworkInterface.getByInetAddress(received_Packet.getAddress()) == null) {
 			System.out.printf("message received : "+rcv_msg+"\n");
 			if(token.equals("Conn")) {
 				//User Connected Add to user List
