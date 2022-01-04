@@ -10,11 +10,11 @@ import java.io.IOException;
 
 public class ConnexionGUI {
 	//public ListUser listUser;
-	
+	static UDP udpListener = new UDP(2020,null);
 	
 	
 	public static void main(String[] args) {  
-		 final UDP udpListener = new UDP(2020,null);
+		 //final UDP udpListener = new UDP(2020,null);
 
 //		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
@@ -32,8 +32,10 @@ public class ConnexionGUI {
 		 b.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
 				 String text = "";
+				 String pseudo = tf.getText();
 				 try {
-					text = Connect(tf.getText());
+					text = Connect(pseudo);
+					udpListener.setPseudo(pseudo);
 					udpListener.start();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -104,23 +106,19 @@ public class ConnexionGUI {
 	}
 	
 	public static void Disconnect(String pseudo) throws IOException {
-		UDP udp = new UDP(2020,pseudo);
-		if (udp.L!= null) {
-			udp.L.clear();
-		}
-		udp.notifyDisconnection(pseudo);
+		udpListener.notifyDisconnection(pseudo);
 		
 	}
 	
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
-		UDP udp=new UDP(2020,pseudo);
-		udp.L = new ListUser();
+		//UDP udp=new UDP(2020,pseudo);
+		//udp.connectedUsers = new ListUser();
 		//userList AllConnectedUser = new userList();
 		//AllConnectedUser = udp.getAllConnected(); 
 		//check = AllConnectedUser.contains(pseudo);
-		udp.L = udp.getAllConnected(); 
-		check = (udp.L).contains(pseudo);
+		udpListener.connectedUsers = udpListener.getAllConnected(); 
+		check = (udpListener.connectedUsers).contains(pseudo);
 		System.out.printf("Pseudo unique : "+ !check +"\n");
 	    return check;
 	}
