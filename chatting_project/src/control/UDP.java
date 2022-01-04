@@ -27,7 +27,7 @@ public class UDP extends Thread  {
 	@Override
 	public void run() {
 		
-		System.out.printf("Début de l'écoute sur la socket 2020 \n");
+		System.out.printf("DÃ©but de l'Ã©coute sur la socket 2020 \n");
 		
 		while(true) {
 			try {
@@ -50,7 +50,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		senderSocket.send(datagramPacket);
-		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.udpPort);
+		System.out.println("Message envoyÃ© : " + MsgToAll +" sur le port "+this.udpPort);
 		senderSocket.close();
 	}	
 	
@@ -65,7 +65,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		Socket.send(datagramPacket);
-		System.out.println("Message envoyé : " + "Who is connected ?" +" sur le port "+this.udpPort);
+		System.out.println("Message envoyÃ© : " + "Who is connected ?" +" sur le port "+this.udpPort);
 		//NetworkInterface.getI
 		// PARTIE RECEIVE MESSAGE
 		int BUFFER_SIZE = 300;
@@ -76,13 +76,13 @@ public class UDP extends Thread  {
 			try {
 				System.out.println("dans le try");
 				Socket.receive(receiverPacket);
-				System.out.println("remoteIP="+NetworkInterface.getByInetAddress(receiverPacket.getAddress()));
+				//System.out.println("remoteIP="+NetworkInterface.getByInetAddress(receiverPacket.getAddress()));
 				
 				if( NetworkInterface.getByInetAddress(receiverPacket.getAddress()) == null) {
 					String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 			        System.out.printf("msg recu :%s\n",rcv_msg);
 					(this.connectedUsers).add(rcv_msg.substring(5));
-					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
+					System.out.printf("utilisateur ajoutÃ© : "+this.connectedUsers+"\n");
 				}
 			}
 			catch(SocketTimeoutException e){
@@ -159,7 +159,9 @@ public class UDP extends Thread  {
 				socket.send(response);
 				
 			}else if(token.equals("I am")) {
-				this.connectedUsers.add(rcv_msg.substring(6));
+				if( !this.connectedUsers.contains(rcv_msg.substring(6))){
+					this.connectedUsers.add(rcv_msg.substring(6));
+				}
 			}
 		}
 		socket.close();
