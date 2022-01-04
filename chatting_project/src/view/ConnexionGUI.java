@@ -13,14 +13,9 @@ public class ConnexionGUI {
 	static UDP udpListener = new UDP(2020,null);
 	
 	
-<<<<<<< HEAD
+
 	public static void main(String[] args) {
 		 final UDP udpListener = new UDP(2020,null);
-=======
-	public static void main(String[] args) {  
-		 //final UDP udpListener = new UDP(2020,null);
->>>>>>> branch 'master' of https://github.com/elliaschabloz/chatting_project_code.git
-
 //		 udpListener.start();
 		 JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
@@ -40,8 +35,11 @@ public class ConnexionGUI {
 				 String pseudo = tf.getText();
 				 try {
 					text = Connect(pseudo);
-					udpListener.setPseudo(pseudo);
-					udpListener.start();
+					if(!(text.equals("Enter an Unused Pseudo "))) {
+						
+						udpListener.setPseudo(pseudo);
+						udpListener.start();
+					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

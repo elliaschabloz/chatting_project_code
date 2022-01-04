@@ -16,12 +16,12 @@ import java.util.concurrent.TimeoutException;
 public class UDP extends Thread  {
 	int udpPort;
 	public String userPseudo;
-	public List<String> connectedUsers;
+	public ArrayList<String> connectedUsers;
 	
 	public UDP(int port,String userPseudo) {
 		this.udpPort = port;
 		this.userPseudo=userPseudo;
-		this.connectedUsers= Collections.<String>emptyList();
+		this.connectedUsers= new ArrayList<String>();
 	}
 	
 	@Override
@@ -54,25 +54,34 @@ public class UDP extends Thread  {
 		senderSocket.close();
 	}	
 	
-	public List<String> getAllConnected() throws IOException {				
+	public ArrayList<String> getAllConnected() throws IOException {				
+		int BUFFER_SIZE = 300;
 		
-		// PARTIE SEND MESSAGE			
-		sendToAll("Who is connected ?");
+		// PARTIE SEND MESSAGE
+		String MsgToAll="Who is connected ?";
+		DatagramSocket Socket = new DatagramSocket(2020);
+		System.out.printf("socket :"+Socket.getLocalPort()+" \n");
+		byte[] data = MsgToAll.getBytes();
+		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
+		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
+		datagramPacket.setPort(this.udpPort);
+		Socket.send(datagramPacket);
 		
 		// PARTIE RECEIVE MESSAGE
-		int BUFFER_SIZE = 300;
-		DatagramSocket Socket = new DatagramSocket(2020);
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
 		Socket.setSoTimeout(2*1000);
 
 		while(true) {
 			try {
-				Socket.receive(receiverPacket);
-				String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
-		        System.out.printf("msg recu :%s\n",rcv_msg);
-				(this.connectedUsers).add(rcv_msg.substring(5));
-				System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
-				
+				System.out.printf("dans le try \n");
+				Socket.receive(receiverPacket);  
+				if(!(receiverPacket.getAddress().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress()))) {
+					String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
+					System.out.printf("msg recu :%s\n",rcv_msg);
+		      
+					(this.connectedUsers).add(rcv_msg.substring(5));
+					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
+				}	
 			}
 			catch(SocketTimeoutException e){
 				break;
@@ -120,14 +129,13 @@ public class UDP extends Thread  {
 		String rcv_msg = new String(received_Packet.getData(), 0, received_Packet.getLength());
 		System.out.printf("message received : "+rcv_msg+"\n");
 		String token = rcv_msg.substring(0,4);
-		
-		if (socket.getInetAddress() != socket.getLocalAddress()) {
+		if (!(received_Packet.getAddress().getHostAddress().equals(InetAddress.getLocalHost().getHostAddress()))) {
 			if(token.equals("Conn")) {
 				//User Connected Add to user List
-				this.connectedUsers.add(rcv_msg.substring(10));
+				this.connectedUsers.add(rcv_msg.substring(11));
 			}else if(token.equals("Disc")) {
 				//User Disconnected Remove from UserList
-				this.connectedUsers.remove(rcv_msg.substring(13));
+				this.connectedUsers.remove(rcv_msg.substring(14));
 			}else if(token.equals("Who'")) {
 				//User Used a broadcast have to respond
 				byte[] msg_buff = ("I am "+userPseudo).getBytes();
@@ -138,7 +146,7 @@ public class UDP extends Thread  {
 				socket.send(response);
 				
 			}else if(token.equals("I am")) {
-				this.connectedUsers.add(rcv_msg.substring(5));
+				this.connectedUsers.add(rcv_msg.substring(6));
 			}
 		}
 		socket.close();

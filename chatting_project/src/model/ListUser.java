@@ -50,7 +50,7 @@ public class ListUser extends ArrayList<String>{
 			}else if(token.equals("Disc")) {
 				//User Disconnected Remove from UserList
 				this.ConnectedUsers.remove(rcv_msg.substring(13));
-			}else if(token.equals("Who'")) {
+			}else if(token.equals("Who ")) {
 				//User Used a broadcast have to respond
 				byte[] msg_buff = ("I am "+userPseudo).getBytes();
 				InetAddress target_Address = received_Packet.getAddress();
