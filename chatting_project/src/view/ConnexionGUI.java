@@ -35,8 +35,7 @@ public class ConnexionGUI {
 				 String pseudo = tf.getText();
 				 try {
 					text = Connect(pseudo);
-					if(!(text.equals("Enter an Unused Pseudo "))) {
-						
+					if(!text.equals("Enter an Unused Pseudo ")) {
 						udpListener.setPseudo(pseudo);
 						udpListener.start();
 					}
