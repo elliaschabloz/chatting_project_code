@@ -81,7 +81,9 @@ public class UDP extends Thread  {
 				if( NetworkInterface.getByInetAddress(receiverPacket.getAddress()) == null) {
 					String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
 			        System.out.printf("msg recu :%s\n",rcv_msg);
-					(this.connectedUsers).add(rcv_msg.substring(5));
+			        if( !this.connectedUsers.contains(rcv_msg.substring(5))){
+						this.connectedUsers.add(rcv_msg.substring(5));
+					}
 					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
 				}
 			}
@@ -142,7 +144,10 @@ public class UDP extends Thread  {
 				//User Connected Add to user List
 				System.out.println(this.connectedUsers);
 				System.out.println(rcv_msg.substring(11));
-				this.connectedUsers.add(rcv_msg.substring(11));
+				if( !this.connectedUsers.contains(rcv_msg.substring(11))){
+					this.connectedUsers.add(rcv_msg.substring(11));
+				}
+				
 				
 				System.out.println("Nouvelle liste : " + this.connectedUsers);
 			}else if(token.equals("Disc")) {
@@ -159,6 +164,8 @@ public class UDP extends Thread  {
 				socket.send(response);
 				
 			}else if(token.equals("I am")) {
+				System.out.println("liste actuelle="+this.connectedUsers);
+				System.out.println("retour du contains="+this.connectedUsers.contains(rcv_msg.substring(6)));
 				if( !this.connectedUsers.contains(rcv_msg.substring(6))){
 					this.connectedUsers.add(rcv_msg.substring(6));
 				}
