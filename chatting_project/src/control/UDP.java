@@ -126,17 +126,14 @@ public class UDP extends Thread  {
 		
 		DatagramSocket socket = new DatagramSocket(2020);
 		DatagramPacket received_Packet = new DatagramPacket(new byte[BUFFER_SIZE],BUFFER_SIZE);
-		
-		
-		//socket.connect(InetAddress.getByName("127.0.0.1"),this.udpPort);
-		
+				
 		socket.receive(received_Packet);
 		String rcv_msg = new String(received_Packet.getData(), 0, received_Packet.getLength());
-		System.out.printf("message received : "+rcv_msg+"\n");
+		
 		String token = rcv_msg.substring(0,4);
 		
 		if( !(received_Packet.getAddress().getHostAddress()).equals(InetAddress.getLocalHost().getHostAddress()) ) {
-			
+			System.out.printf("message received : "+rcv_msg+"\n");
 			if(token.equals("Conn")) {
 				//User Connected Add to user List
 				System.out.println(this.connectedUsers);
