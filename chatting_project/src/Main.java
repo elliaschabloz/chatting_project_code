@@ -17,7 +17,16 @@ public class Main {
 		String hostname = args[0];
         int port = Integer.parseInt(args[1]);
         */
-		TCP.Server(1234);
+		//TCP.Server(1234);
+		
+		
+		Runnable runSrv =
+				new Runnable() {
+			public void run() {
+				TCP.Server(1234);
+			}
+		};
+		runSrv.run();
 		TCP.Client(null, 1234);
 	}
 }

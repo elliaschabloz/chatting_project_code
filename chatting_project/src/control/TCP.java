@@ -9,6 +9,12 @@ public class TCP {
  
         //String hostname = args[0];
         //int port = Integer.parseInt(args[1]);
+		try {
+			System.out.println("Hostname : " + InetAddress.getLocalHost().getHostName());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         Server(1234);
 		Client(null, 1234);
         
