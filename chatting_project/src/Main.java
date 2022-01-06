@@ -27,6 +27,8 @@ public class Main {
 			}
 		};
 		runSrv.run();
-		TCP.Client(null, 1234);
+		
+		String hostname = "insa-20072";
+		TCP.Client(hostname, 1234);
 	}
 }
