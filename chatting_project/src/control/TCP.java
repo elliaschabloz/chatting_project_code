@@ -9,6 +9,7 @@ public class TCP {
  
         //String hostname = args[0];
         //int port = Integer.parseInt(args[1]);
+		/*
 		try {
 			System.out.println("Hostname : " + InetAddress.getLocalHost().getHostName());
 		} catch (UnknownHostException e) {
@@ -17,9 +18,38 @@ public class TCP {
 		}
         Server(1234);
 		Client(null, 1234);
-        
+        */
+		
     }
 	
+	public static Socket StartChattingSessionWith(String hostname, int port) throws UnknownHostException, IOException {
+		
+		Socket socket = new Socket(hostname, port);
+		return socket;
+	}
+	public static void SendTo(Socket socket, String msg) {
+		OutputStream output;
+		PrintWriter writer;
+		try {
+			output = socket.getOutputStream();
+			writer = new PrintWriter(output, true);
+			//send message
+	        writer.println(msg);
+			//socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void CloseChattingSessionWith(Socket socket) {
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void Client(String hostname, int port) {
 		try (Socket socket = new Socket(hostname, port)) {
 			 

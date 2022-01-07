@@ -22,7 +22,7 @@ public class TCPServerThread extends Thread {
 				reader = new BufferedReader(new InputStreamReader(input));
  
                 response = reader.readLine();
-                System.out.println("j'ai recu un truc");
+                //System.out.println("j'ai recu un truc");
                 System.out.println("Server: " + response);
 				
 			} while (!response.equals("bye"));
