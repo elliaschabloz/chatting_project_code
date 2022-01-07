@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.swing.BoxLayout;
@@ -54,12 +55,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class MainWindow {
-
+	
 	private JFrame frame;
 	private JTable connectedUser;
 	private JTextField messageToSend;
 	private JTable messageViewUser;
 
+	/**
+	 * UTILS FONCTION
+	 * 
+	 */
+	SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
+	
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -105,7 +114,7 @@ public class MainWindow {
 		connectedUser = new JTable();
 		connectedUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		connectedUser.setShowVerticalLines(false);
-		final DefaultTableModel model =new DefaultTableModel(
+		DefaultTableModel modelUser =new DefaultTableModel(
 				new Object[][] {
 					{null},
 					{null},
@@ -115,7 +124,7 @@ public class MainWindow {
 					"Connected Users"
 				}
 			); 
-		connectedUser.setModel(model);
+		connectedUser.setModel(modelUser);
 		userPanel.add(connectedUser, "cell 0 0,grow");
 		
 		JPanel usrOptions = new JPanel();
@@ -154,54 +163,30 @@ public class MainWindow {
 		messageView.add(scrollPane);
 		
 		messageViewUser = new JTable();
+		messageViewUser.setShowVerticalLines(false);
 		scrollPane.setViewportView(messageViewUser);
-		messageViewUser.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null}
-			},
-			new String[] {
-				"User", "Date", "Message"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Object.class, String.class
+		
+		final DefaultTableModel modelMessage = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"User", "Date", "Message"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Object.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
 			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		JButton btnNewButton = new JButton("Send");
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			model.addRow(new Object[]{"user 1",new java.util.Date().getTime()
-					,messageToSend.getText()
-					});
-			
-			}
-		});
+		
+		messageViewUser.setModel(modelMessage);
 		messageViewUser.getColumnModel().getColumn(0).setPreferredWidth(50);
 		messageViewUser.getColumnModel().getColumn(0).setMinWidth(10);
 		messageViewUser.getColumnModel().getColumn(0).setMaxWidth(60);
-		messageViewUser.getColumnModel().getColumn(1).setPreferredWidth(60);
-		messageViewUser.getColumnModel().getColumn(1).setMaxWidth(60);
+		messageViewUser.getColumnModel().getColumn(1).setPreferredWidth(70);
+		messageViewUser.getColumnModel().getColumn(1).setMaxWidth(75);
 		messageViewUser.setTableHeader(null);
 		JPanel messageArea = new JPanel();
 		message.add(messageArea, "cell 0 1,grow");
@@ -211,16 +196,16 @@ public class MainWindow {
 		messageArea.add(messageToSend, "cell 0 0,growx");
 		messageToSend.setColumns(10);
 		
-//		JButton btnNewButton = new JButton("Send");
-//		btnNewButton.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//			model.addRow(new Object[]{"user 1",new java.util.Date().getTime()
-//					,messageToSend.getText()
-//					});
-//			
-//			}
-//		});
+		JButton btnNewButton = new JButton("Send");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			modelMessage.addRow(new Object[]{"user 1",formater.format(new Date())
+					,messageToSend.getText()
+					});
+			
+			}
+		});
 		messageArea.add(btnNewButton, "cell 1 0");
 	}
 	
