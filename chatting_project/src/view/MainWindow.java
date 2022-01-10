@@ -232,7 +232,7 @@ public class MainWindow {
 		        String optionSelected = (String)cb.getSelectedItem();
 		        if(optionSelected.equals("Change Pseudo")) {
 		        	try {
-						ChangePseudo("nothing");
+						ChangePseudo();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -301,10 +301,13 @@ public class MainWindow {
 		return unique;
 	}
 	
-	private void ChangePseudo(String NewPseudo) throws IOException{
+	private void ChangePseudo() throws IOException{
+		JFrame changePseudoFrame= new JFrame();
 		boolean unique;
 		do{
-			unique = CheckPseudoUnicity(NewPseudo);
+
+			String retour = JOptionPane.showInputDialog(changePseudoFrame, "Please enter a valid Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
+			unique = CheckPseudoUnicity(retour);
 		}while(!unique);
 	}
 	
