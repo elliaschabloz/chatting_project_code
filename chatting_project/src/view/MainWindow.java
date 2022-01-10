@@ -61,7 +61,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
 public class MainWindow {
-	
+	public String userPseudo;
 	private JFrame frame;
 	private JTable connectedUser;
 	private JTextField messageToSend;
@@ -74,7 +74,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow();
+					MainWindow window = new MainWindow("moi");
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -86,7 +86,8 @@ public class MainWindow {
 	/**
 	 * Create the application.
 	 */
-	public MainWindow() {
+	public MainWindow(String userPseudo) {
+		this.userPseudo=userPseudo;
 		initialize();
 	}
 	/**
@@ -161,11 +162,6 @@ public class MainWindow {
 		return tabUser;
 	};
 	
-	
-	
-	
-	
-	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -223,12 +219,29 @@ public class MainWindow {
 		usrOptions.setLayout(sl_usrOptions);
 		
 		
-		String[] optionsList = {"Start","Change Pseudo","Deconnection"};
+		String[] optionsList = {"Options...","Change Pseudo","Deconnection"};
 		JComboBox comboBox = new JComboBox(optionsList);
 
 		sl_usrOptions.putConstraint(SpringLayout.NORTH, comboBox, 23, SpringLayout.NORTH, usrOptions);
 		sl_usrOptions.putConstraint(SpringLayout.WEST, comboBox, 15, SpringLayout.WEST, usrOptions);
 		sl_usrOptions.putConstraint(SpringLayout.EAST, comboBox, 135, SpringLayout.WEST, usrOptions);
+		
+		comboBox.addActionListener(new JComboBox () {
+		    public void actionPerformed(ActionEvent e) {
+		        JComboBox cb = (JComboBox)e.getSource();
+		        String optionSelected = (String)cb.getSelectedItem();
+		        if(optionSelected.equals("Change Pseudo")) {
+		        	try {
+						ChangePseudo("nothing");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }else if(optionSelected.equals("Deconnection")) {
+		        	Disconnect();
+		        }
+		    }});
+		
 		usrOptions.add(comboBox);
 		
 		JPanel messagePanel = new JPanel();
@@ -240,9 +253,6 @@ public class MainWindow {
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Welcome", null, panel_1, null);
-		
-		JPanel message = createTab("User 1");
-		tabbedPane.addTab("User 1", null, message, null);
 		
 		
 		/*
@@ -260,7 +270,7 @@ public class MainWindow {
 		          TableModel tm = connectedUser.getModel();
 		          value = tm.getValueAt(sel[0],0);
 		          if(tabbedPane.indexOfTab((String) value)==-1) {
-		        	  tabbedPane.addTab((String) value,null,createTab(value),null);
+		        	  tabbedPane.addTab((String) value,null,createTab(userPseudo),null);
 		          };
 		          tabbedPane.setSelectedIndex(tabbedPane.indexOfTab((String) value));
 		          }
@@ -272,7 +282,10 @@ public class MainWindow {
 		JFrame disconnectFrame = new JFrame();
 		int result = JOptionPane.showConfirmDialog(disconnectFrame,"Confirm your deconnection");		
 		if(result==0) {
-			// insert upddisconnect
+			/*
+			*insert upd disconnect
+			*/
+			System.out.println("Normalement on est déconnecté ");
 		}
 	}
 	
