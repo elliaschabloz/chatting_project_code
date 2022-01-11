@@ -14,14 +14,16 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;  
 
 public class ConnexionGUI {
+	JFrame frame;
 	//public ListUser listUser;
 	static UDP udpListener = new UDP(2020,null);
+	
 	
 	
 	public static void main(String[] args) {  
 		 //final UDP udpListener = new UDP(2020,null);
 		//		 udpListener.start();
-		 JFrame f=new JFrame("CONNEXION");  
+		 final JFrame f=new JFrame("CONNEXION");  
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
 		 final JLabel labelPseudo = new JLabel();
@@ -41,7 +43,9 @@ public class ConnexionGUI {
 					text = Connect(pseudo);
 					if(!text.equals("Enter an Unused Pseudo ")) {
 						udpListener.setPseudo(pseudo);
-						udpListener.start();
+						MainWindow window = new MainWindow(udpListener);
+						window.frame.setVisible(true);
+						f.setVisible(false);
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();

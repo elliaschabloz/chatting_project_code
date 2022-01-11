@@ -61,11 +61,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
 public class MainWindow {
-	public String userPseudo;
-	private JFrame frame;
+	JFrame frame;
 	private JTable connectedUser;
 	private JTextField messageToSend;
 	private JTable messageViewUser;
+	public static UDP udpListener;
 
 	/**
 	 * Launch the application.
@@ -74,7 +74,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainWindow window = new MainWindow("moi");
+					MainWindow window = new MainWindow(udpListener);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -86,8 +86,9 @@ public class MainWindow {
 	/**
 	 * Create the application.
 	 */
-	public MainWindow(String userPseudo) {
-		this.userPseudo=userPseudo;
+	public MainWindow(UDP udpListener) {
+		MainWindow.udpListener=udpListener;
+		MainWindow.udpListener.start();
 		initialize();
 	}
 	/**
@@ -226,22 +227,6 @@ public class MainWindow {
 		sl_usrOptions.putConstraint(SpringLayout.WEST, comboBox, 15, SpringLayout.WEST, usrOptions);
 		sl_usrOptions.putConstraint(SpringLayout.EAST, comboBox, 135, SpringLayout.WEST, usrOptions);
 		
-		comboBox.addActionListener(new JComboBox () {
-		    public void actionPerformed(ActionEvent e) {
-		        JComboBox cb = (JComboBox)e.getSource();
-		        String optionSelected = (String)cb.getSelectedItem();
-		        if(optionSelected.equals("Change Pseudo")) {
-		        	try {
-						ChangePseudo();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-		        }else if(optionSelected.equals("Deconnection")) {
-		        	Disconnect();
-		        }
-		    }});
-		
 		usrOptions.add(comboBox);
 		
 		JPanel messagePanel = new JPanel();
@@ -259,6 +244,32 @@ public class MainWindow {
 		 * SECTION LISTENER AND EVENT
 		 * 
 		 * */
+		
+		/*
+		 *  OPTION SELECTION
+		 * */
+		comboBox.addActionListener(new JComboBox () {
+		    public void actionPerformed(ActionEvent e) {
+		        JComboBox cb = (JComboBox)e.getSource();
+		        String optionSelected = (String)cb.getSelectedItem();
+		        
+		        // OPTION CHOOSED BY THE USER
+		        if(optionSelected.equals("Change Pseudo")) {
+		        	try {
+						ChangePseudo();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }else if(optionSelected.equals("Deconnection")) {
+		        	Disconnect();
+		        }
+		    }});
+		
+		/*
+		 *  CREATION TAB FOR A DISCUSSION
+		 * */
+		
 		connectedUser.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -266,51 +277,49 @@ public class MainWindow {
 				Object value;
 				sel = connectedUser.getSelectedRows();
 
-				 // récupérer les données de la table
+				 // CHECK IF THE TAB ALREADY OPENED
 
 		          TableModel tm = connectedUser.getModel();
 		          value = tm.getValueAt(sel[0],0);
 		          if(tabbedPane.indexOfTab((String) value)==-1) {
-		        	  tabbedPane.addTab((String) value,null,createTab(userPseudo),null);
+		        	  tabbedPane.addTab((String) value,null,createTab(MainWindow.udpListener.userPseudo),null);
 		          };
+		          // OPEN THE TAB SELECTED
 		          tabbedPane.setSelectedIndex(tabbedPane.indexOfTab((String) value));
 		          }
 		});
 	}
 	
-	
+	/*
+	 * 
+	 * FONCTION USED BY OUR VIEW AND ACCESSIBLE DIRECTLY BY THE USER
+	 * 
+	 */
 	public void Disconnect() {
 		JFrame disconnectFrame = new JFrame();
 		int result = JOptionPane.showConfirmDialog(disconnectFrame,"Confirm your deconnection");		
 		if(result==0) {
-			/*
-			*insert upd disconnect
-			*/
-			System.out.println("Normalement on est d�connect� ");
+			try {
+				udpListener.notifyDisconnection(udpListener.userPseudo);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Normalement on est d�connect� ");
 
 		}
 	}
 	
 	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
-		//on doit récupérer les pseudos de tous les users connectés
-		//puis vérifier l'appartenance du pseudo à cette liste
-		boolean unique;
-		UDP udp = new UDP(2525,null);
-		List<String> allConnected = udp.getAllConnected();
-		if (allConnected.contains(pseudo)) {
-			unique = false;
-		} else unique=true;
-		return unique;
+		boolean check = (MainWindow.udpListener.connectedUsers).contains(pseudo);
+		return check;
 	}
 	
 	private void ChangePseudo() throws IOException{
 		JFrame changePseudoFrame= new JFrame();
-		boolean unique;
-		do{
-
-			String retour = JOptionPane.showInputDialog(changePseudoFrame, "Please enter a valid Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
-			unique = CheckPseudoUnicity(retour);
-		}while(!unique);
+		boolean check;
+		String newUserPseudo = JOptionPane.showInputDialog(changePseudoFrame, "Please enter a valid Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
+		check = CheckPseudoUnicity(newUserPseudo);
 	}
 	
 	public void SendMsgTo(String msg, String receiver) {
