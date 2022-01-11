@@ -11,6 +11,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/jia-g/chatting_project_code/chatting_project/miglayout15-swing.jar"/>
+	<classpathentry kind="lib" path="/home/ahamdy/Bureau/chatting_project_code/miglayout15-swing.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
+

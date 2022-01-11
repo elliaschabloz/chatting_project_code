@@ -265,8 +265,9 @@ public class MainWindow {
 				int[] sel;
 				Object value;
 				sel = connectedUser.getSelectedRows();
-				
-				 // récupérer les données de la table
+
+				 // rÃ©cupÃ©rer les donnÃ©es de la table
+
 		          TableModel tm = connectedUser.getModel();
 		          value = tm.getValueAt(sel[0],0);
 		          if(tabbedPane.indexOfTab((String) value)==-1) {
@@ -286,12 +287,13 @@ public class MainWindow {
 			*insert upd disconnect
 			*/
 			System.out.println("Normalement on est déconnecté ");
+
 		}
 	}
 	
 	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
-		//on doit récupérer les pseudos de tous les users connectés
-		//puis vérifier l'appartenance du pseudo à cette liste
+		//on doit rÃ©cupÃ©rer les pseudos de tous les users connectÃ©s
+		//puis vÃ©rifier l'appartenance du pseudo Ã  cette liste
 		boolean unique;
 		UDP udp = new UDP(2525,null);
 		List<String> allConnected = udp.getAllConnected();
