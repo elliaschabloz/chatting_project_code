@@ -320,6 +320,10 @@ public class MainWindow {
 		boolean check;
 		String newUserPseudo = JOptionPane.showInputDialog(changePseudoFrame, "Please enter a valid Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
 		check = CheckPseudoUnicity(newUserPseudo);
+		while(check) {
+			newUserPseudo = JOptionPane.showInputDialog(changePseudoFrame, "Please enter an unused Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
+			check = CheckPseudoUnicity(newUserPseudo);	
+		}
 	}
 	
 	public void SendMsgTo(String msg, String receiver) {
