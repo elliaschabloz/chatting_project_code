@@ -27,14 +27,21 @@ public class ConnexionGUI {
 		 final JTextField tf=new JTextField();
 		 final JLabel labelMessage = new JLabel();
 		 final JLabel labelPseudo = new JLabel();
-		 labelPseudo.setBounds(55,120,80,20); 
-		 tf.setBounds(125,120, 150,20); 
-		 labelMessage.setBounds(55,180, 250,20);  
+		 labelPseudo.setBounds(45,45,80,20); 
+		 tf.setBounds(115,45, 150,20); 
+		 labelMessage.setBounds(45,70, 250,20);  
 		 labelPseudo.setText("Pseudo :");
 		 JButton b=new JButton("Connect");
-		 JButton b2=new JButton("Disconnect");
 		 tf.setText("Enter your Pseudo");
-		 b.setBounds(150,220,100,30);
+		 b.setBounds(140,110,100,30);
+		 
+		 /*
+		  * Listener for the bouton connect 
+		  * 		-> if your pseudo is unique open the main Windows
+		  * 		-> else demande the user to enter an unused pseudo
+		  * 
+		  */
+		 
 		 b.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
 				 String text = "";
@@ -51,46 +58,11 @@ public class ConnexionGUI {
 					e1.printStackTrace();
 				}
 				 labelMessage.setText(text);
-			        /*try{
-			        	//A voir 
-
-			        	String enteredPseudo = tf.getText();
-			        	udpListener.setPseudo(enteredPseudo);
-			        	
-			        	if (!CheckPseudoUnicity(enteredPseudo)) {
-			        		//Add User to UseerList
-			        		Connect(enteredPseudo);
-			        		udpListener.start();
-			        		//Connect("ok");
-			        		String reussite="Your are connected as "+enteredPseudo;  
-			        		labelMessage.setText(reussite);
-			        	}else {
-			        		//Retry enter pseudo
-			        		String echec="Enter an Unused Pseudo ";  
-			        		labelMessage.setText(echec);
-			        	}
-			        
-			        
-			        }catch(Exception ex){System.out.println(ex);}  */
 			    }
 		 });
-		 b2.setBounds(150,260,100,30);
-		 b2.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-				 String enteredPseudo = tf.getText();
-				 try {
-					Disconnect(enteredPseudo);
-					String deco="Your are disconnected !";  
-	        		labelMessage.setText(deco);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				 
-			 }
-		 });
-		 f.add(b);f.add(b2);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
-		 f.setSize(400,400);  
+
+		 f.add(b);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
+		 f.setSize(360,200);  
 		 f.setLayout(null);  
 		 f.setVisible(true); 
 		 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,17 +88,13 @@ public class ConnexionGUI {
 	}
 	
 	public static void Disconnect(String pseudo) throws IOException {
-		udpListener.notifyDisconnection(pseudo);
-		
+		//Notify all user your are disconnected
+		udpListener.notifyDisconnection(pseudo);		
 	}
 	
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
 		boolean check= false;
-		//UDP udp=new UDP(2020,pseudo);
-		//udp.connectedUsers = new ListUser();
-		//userList AllConnectedUser = new userList();
-		//AllConnectedUser = udp.getAllConnected(); 
-		//check = AllConnectedUser.contains(pseudo);
+		//Get all user connected and verify if your pseudo is already in 
 		udpListener.connectedUsers = udpListener.getAllConnected(); 
 		check = (udpListener.connectedUsers).contains(pseudo);
 		System.out.printf("Pseudo unique : "+ !check +"\n");

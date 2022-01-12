@@ -67,7 +67,7 @@ public class MainWindow {
 	private JTable messageViewUser;
 	public static UDP udpListener;
 
-	/**
+	/*
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -83,7 +83,7 @@ public class MainWindow {
 		});
 	}
 
-	/**
+	/*
 	 * Create the application.
 	 */
 	public MainWindow(UDP udpListener) {
@@ -91,16 +91,16 @@ public class MainWindow {
 		MainWindow.udpListener.start();
 		initialize();
 	}
-	/**
-	 * UTILS FONCTION
+	/*
+	 * Fonction set date format
 	 * 
 	 */
 	SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 	
 	
 	/*
-	 * CREATE A TABBED TO START A CONVERSATION  
-	 * */
+	 * FONCTION FOR CREATE A TABBED TO START A CONVERSATION  
+	 */
 	
 	private JPanel createTab(final Object name) {
 		JPanel tabUser = new JPanel();
@@ -118,6 +118,10 @@ public class MainWindow {
 		messageViewUser.setShowVerticalLines(false);
 		scrollPane.setViewportView(messageViewUser);
 		
+		/*
+		 * THE MESSAGE VIEW BASED ON A TABLE  
+		 *  IN THE FOLLOWING CODE WE CREATE A TABLE WITH SENDER,DATE AND MESSAGE
+		 */
 		final DefaultTableModel modelMessage = new DefaultTableModel(
 				new Object[][] {
 				},
@@ -148,6 +152,10 @@ public class MainWindow {
 		messageArea.add(messageToSend, "cell 0 0,growx");
 		messageToSend.setColumns(10);
 		
+		/*
+		 * LISTENER TO SEND A MESSAGE IN THE ACTIVE TAB 
+		 * 	AND WE ADD A NEW ROW FOR EACH MESSAGE SEND BY THE USER
+		 */
 		JButton btnNewButton = new JButton("Send");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -163,8 +171,15 @@ public class MainWindow {
 		return tabUser;
 	};
 	
-	/**
+	/*
 	 * Initialize the contents of the frame.
+	 * THE MAIN WINDOWS WAS COMPOSED BY DIFFERENT PART 
+	 *		MESSAGE PANEL
+	 *			->MESSAGE VIEW
+	 *			->MESSAGE SEND
+	 *		USER PANEL
+	 *			->CONNECTED USERs
+	 *			->USER OPTIONS 
 	 */
 	private void initialize() {
 		frame = new JFrame();
@@ -178,9 +193,13 @@ public class MainWindow {
 		JSplitPane splitPane = new JSplitPane();
 		panel.add(splitPane);
 		
+		// USER PANEL
+		
 		JPanel userPanel = new JPanel();
 		splitPane.setRightComponent(userPanel);
 		userPanel.setLayout(new MigLayout("", "[grow]", "[279.00,grow][grow]"));
+		
+		// CONNECTED USERS: TABLE OF USERS
 		
 		connectedUser = new JTable();
 		connectedUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -211,14 +230,12 @@ public class MainWindow {
 		connectedUser.setModel(modelUser);
 		userPanel.add(connectedUser, "cell 0 0,grow");
 		
-		
-
+		// USER OPTIONS
 		
 		JPanel usrOptions = new JPanel();
 		userPanel.add(usrOptions, "cell 0 1,grow");
 		SpringLayout sl_usrOptions = new SpringLayout();
 		usrOptions.setLayout(sl_usrOptions);
-		
 		
 		String[] optionsList = {"Options...","Change Pseudo","Deconnection"};
 		JComboBox comboBox = new JComboBox(optionsList);
@@ -228,6 +245,8 @@ public class MainWindow {
 		sl_usrOptions.putConstraint(SpringLayout.EAST, comboBox, 135, SpringLayout.WEST, usrOptions);
 		
 		usrOptions.add(comboBox);
+		
+		// MESSAGE PANEL
 		
 		JPanel messagePanel = new JPanel();
 		splitPane.setLeftComponent(messagePanel);
@@ -239,15 +258,14 @@ public class MainWindow {
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Welcome", null, panel_1, null);
 		
-		
 		/*
 		 * SECTION LISTENER AND EVENT
 		 * 
-		 * */
+		 */
 		
 		/*
 		 *  OPTION SELECTION
-		 * */
+		 */
 		comboBox.addActionListener(new JComboBox () {
 		    public void actionPerformed(ActionEvent e) {
 		        JComboBox cb = (JComboBox)e.getSource();
@@ -268,7 +286,7 @@ public class MainWindow {
 		
 		/*
 		 *  CREATION TAB FOR A DISCUSSION
-		 * */
+		 */
 		
 		connectedUser.addMouseListener(new MouseAdapter() {
 			@Override
