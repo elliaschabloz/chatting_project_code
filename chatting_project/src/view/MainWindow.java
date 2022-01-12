@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -345,7 +346,14 @@ public class MainWindow {
 	}
 	
 	public void SendMsgTo(String msg, String receiver) {
-		
+		try {
+			Socket socket = TCP.StartChattingSessionWith(receiver, 1234);
+			TCP.SendTo(socket, msg);
+			TCP.CloseChattingSessionWith(socket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String RecvMsgFrom(String msg, String sender) {

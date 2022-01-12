@@ -3,7 +3,7 @@ import src.model.*;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeoutException;
+import java.util.Map.Entry;
 
 /* UDP Class for Connection=CheckingPseudoUnicity in broadcast
  * and disconnection which is a broadcast message.
@@ -17,11 +17,14 @@ public class UDP extends Thread  {
 	int udpPort;
 	public String userPseudo;
 	public ArrayList<String> connectedUsers;
+	public List<Entry<String,String>> pairList;
+	public List<User> userList;
 	
 	public UDP(int port,String userPseudo) {
 		this.udpPort = port;
 		this.userPseudo=userPseudo;
 		this.connectedUsers= new ArrayList<String>();
+		this.userList = new ArrayList<User>();
 	}
 	
 	@Override
@@ -80,9 +83,21 @@ public class UDP extends Thread  {
 				
 				if( NetworkInterface.getByInetAddress(receiverPacket.getAddress()) == null) {
 					String rcv_msg = new String(receiverPacket.getData(), 0, receiverPacket.getLength());
+					String pseudo = rcv_msg.substring(5);
+					String hostname = receiverPacket.getAddress().getHostName();
 			        System.out.printf("msg recu :%s\n",rcv_msg);
-			        if( !this.connectedUsers.contains(rcv_msg.substring(5))){
-						this.connectedUsers.add(rcv_msg.substring(5));
+			        
+			        if( !this.connectedUsers.contains(pseudo)){
+						this.connectedUsers.add(pseudo);
+						
+						
+						java.util.Map.Entry<String,String> pair =
+								new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
+						this.pairList.add(pair);
+						
+						User conUser = new User(pseudo, hostname);
+						this.userList.add(conUser);
+
 					}
 					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
 				}
@@ -94,6 +109,7 @@ public class UDP extends Thread  {
 				
 		Socket.close();
 		System.out.printf("Liste initiale : "+(this.connectedUsers)+"\n");
+		System.out.println("Liste pair initiale : "+(this.pairList));
 		//list.updateListUser();
 		return this.connectedUsers;
 	}
@@ -132,7 +148,7 @@ public class UDP extends Thread  {
 				
 		socket.receive(received_Packet);
 		String rcv_msg = new String(received_Packet.getData(), 0, received_Packet.getLength());
-		
+		String pseudo;
 		String token = rcv_msg.substring(0,4);
 		
 		//System.out.println("LocalAdd : " + InetAddress.getLocalHost().getHostAddress());
@@ -142,18 +158,30 @@ public class UDP extends Thread  {
 			System.out.printf("message received : "+rcv_msg+"\n");
 			if(token.equals("Conn")) {
 				//User Connected Add to user List
+				pseudo = rcv_msg.substring(11);
 				System.out.println(this.connectedUsers);
-				System.out.println(rcv_msg.substring(11));
-				if( !this.connectedUsers.contains(rcv_msg.substring(11))){
-					this.connectedUsers.add(rcv_msg.substring(11));
+				System.out.println(pseudo);
+				if( !this.connectedUsers.contains(pseudo)){
+					this.connectedUsers.add(pseudo);
+					String hostname = received_Packet.getAddress().getHostName();
+					java.util.Map.Entry<String,String> pair =
+							new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
+					this.pairList.add(pair);
 				}
-				
-				
 				System.out.println("Nouvelle liste : " + this.connectedUsers);
+				System.out.println("Nouvelle pairList : "+(this.pairList));
+				
 			}else if(token.equals("Disc")) {
 				//User Disconnected Remove from UserList
-				this.connectedUsers.remove(rcv_msg.substring(14));
+				pseudo = rcv_msg.substring(14);
+				this.connectedUsers.remove(pseudo);
+				
+				int index = this.pairList.indexOf(pseudo);
+				this.pairList.remove(index);
+				
 				System.out.println("Nouvelle liste : " + this.connectedUsers);
+				System.out.println("Nouvelle pairList : "+(this.pairList));
+				
 			}else if(token.equals("Who ")) {
 				//User Used a broadcast have to respond
 				byte[] msg_buff = ("I am "+userPseudo).getBytes();
@@ -164,11 +192,18 @@ public class UDP extends Thread  {
 				socket.send(response);
 				
 			}else if(token.equals("I am")) {
+				pseudo = rcv_msg.substring(6);
 				System.out.println("liste actuelle="+this.connectedUsers);
-				System.out.println("retour du contains="+this.connectedUsers.contains(rcv_msg.substring(6)));
-				if( !this.connectedUsers.contains(rcv_msg.substring(6))){
-					this.connectedUsers.add(rcv_msg.substring(6));
+				System.out.println("retour du contains="+this.connectedUsers.contains(pseudo));
+				if( !this.connectedUsers.contains(pseudo)){
+					this.connectedUsers.add(pseudo);
+					String hostname = received_Packet.getAddress().getHostName();
+					java.util.Map.Entry<String,String> pair =
+							new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
+					this.pairList.add(pair);
 				}
+				System.out.println("Nouvelle liste : " + this.connectedUsers);
+				System.out.println("Nouvelle pairList : "+(this.pairList));
 			}
 		}
 		socket.close();
