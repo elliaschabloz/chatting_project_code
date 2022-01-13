@@ -6,12 +6,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
+//
 public class DataBase {
 
 	
 	public static void main(String[] args) {
 		Connection con = null;
-		initDB(con);
+		con = initDB(con);
 		ArrayList<List<String>> historique = null;
 		try {
 			historique = QueryMsgFromDB(con,"toto", "titi");
@@ -22,7 +23,7 @@ public class DataBase {
 		System.out.println("historique = " + historique);
 	}
 	
-	public static void initDB(Connection con) {
+	public static Connection initDB(Connection con) {
 		try {
 			con = DriverManager.getConnection(
 					"jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/tp_servlet_015",
@@ -31,6 +32,7 @@ public class DataBase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return con;
 	}
 	
 	public void addMsgToDB(Connection con,String emitter, String receiver, String msg) {
