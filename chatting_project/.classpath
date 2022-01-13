@@ -12,5 +12,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Documents/4IR/UML/chatting_project_code/chatting_project/miglayout15-swing.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/4IR/UML/chatting_project_code/mysql-connector-java-8.0.27/mysql-connector-java-8.0.27.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
