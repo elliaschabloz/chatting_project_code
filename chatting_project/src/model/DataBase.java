@@ -15,7 +15,8 @@ public class DataBase {
 		con = initDB(con);
 		ArrayList<List<String>> historique = null;
 		try {
-			historique = QueryMsgFromDB(con,"toto", "titi");
+			historique = QueryMsgFromDB(con,"tutu", "tata");
+			//addMsgToDB(con, "tutu","tata","Lorem Ipsum");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,12 +36,12 @@ public class DataBase {
 		return con;
 	}
 	
-	public void addMsgToDB(Connection con,String emitter, String receiver, String msg) {
+	public static void addMsgToDB(Connection con,String emitter, String receiver, String msg) {
 		try {
 			Statement statement = con.createStatement();
 			statement.executeUpdate(
-					"INSERT INTO messages (emitter,receiver,msg,date) VALUES ("
-					+ "\""+ emitter + ","+"\""+receiver+ ","+"\""+msg+")");
+					"INSERT INTO MESSAGE (emitter,receiver,message) VALUES ("
+					+ "'"+ emitter + "',"+"'"+receiver+ "',"+"'"+msg+"')");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

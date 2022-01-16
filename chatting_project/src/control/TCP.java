@@ -2,31 +2,44 @@ package src.control;
 import java.net.*;
 import java.io.*;
 
+
 public class TCP {
     
 	public static void main(String[] args) {
-        //if (args.length < 2) return;
- 
-        //String hostname = args[0];
-        //int port = Integer.parseInt(args[1]);
-		/*
-		try {
-			System.out.println("Hostname : " + InetAddress.getLocalHost().getHostName());
+       
+        String hostname = null;
+        
+        // creates a thread that will run a server that listens 
+        // to the TCP connections
+        Runnable runSrv =
+				new Runnable() {
+			public void run() {
+				Server(1234);
+			}
+		};
+		Thread th = new Thread(runSrv);
+		th.start();
+		
+        try {
+			Socket userSocket = StartChattingSessionWith(hostname, 1234);
+			SendTo(userSocket, "coucou");
+			CloseChattingSessionWith(userSocket);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
 			e.printStackTrace();
 		}
-        Server(1234);
-		Client(null, 1234);
-        */
 		
     }
 	
 	public static Socket StartChattingSessionWith(String hostname, int port) throws UnknownHostException, IOException {
-		
+		// create the socket for a specific user for them to chat through
 		Socket socket = new Socket(hostname, port);
 		return socket;
 	}
+	
 	public static void SendTo(Socket socket, String msg) {
 		OutputStream output;
 		PrintWriter writer;
@@ -37,7 +50,7 @@ public class TCP {
 	        writer.println(msg);
 			//socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -46,7 +59,7 @@ public class TCP {
 		try {
 			socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

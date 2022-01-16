@@ -23,10 +23,12 @@ public class TCPServerThread extends Thread {
  
                 response = reader.readLine();
                 //System.out.println("j'ai recu un truc");
+                if(response==null) break;
                 System.out.println("Server: " + response);
 				
-			} while (!response.equals("bye"));
+			} while (true);
 			socket.close();
+			System.out.println("Socket fermé !");
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();

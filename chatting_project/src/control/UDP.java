@@ -30,7 +30,7 @@ public class UDP extends Thread  {
 	@Override
 	public void run() {
 		
-		System.out.printf("DÃ©but de l'Ã©coute sur la socket 2020 \n");
+		System.out.printf("Début de l'écoute sur la socket 2020 \n");
 		
 		while(true) {
 			try {
@@ -53,7 +53,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		senderSocket.send(datagramPacket);
-		System.out.println("Message envoyÃ© : " + MsgToAll +" sur le port "+this.udpPort);
+		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.udpPort);
 		senderSocket.close();
 	}	
 	
@@ -68,7 +68,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		Socket.send(datagramPacket);
-		System.out.println("Message envoyÃ© : " + "Who is connected ?" +" sur le port "+this.udpPort);
+		System.out.println("Message envoyé : " + "Who is connected ?" +" sur le port "+this.udpPort);
 		//NetworkInterface.getI
 		// PARTIE RECEIVE MESSAGE
 		int BUFFER_SIZE = 300;
@@ -99,7 +99,7 @@ public class UDP extends Thread  {
 						this.userList.add(conUser);
 
 					}
-					System.out.printf("utilisateur ajoutÃ© : "+this.connectedUsers+"\n");
+					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
 				}
 			}
 			catch(SocketTimeoutException e){
