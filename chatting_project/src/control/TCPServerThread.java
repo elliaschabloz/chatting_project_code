@@ -5,6 +5,7 @@ import java.io.*;
 public class TCPServerThread extends Thread {
 
 	private Socket socket;
+	public static volatile String response;
 	 
     public TCPServerThread(Socket socket) {
         this.socket = socket;
@@ -15,16 +16,19 @@ public class TCPServerThread extends Thread {
             InputStream input = socket.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
  
-            String response;
+//            String response;
 			do {	
 				//read entry
+				System.out.println("avant bloquant"+response);
 				input = socket.getInputStream();
+				
 				reader = new BufferedReader(new InputStreamReader(input));
  
                 response = reader.readLine();
                 //System.out.println("j'ai recu un truc");
                 if(response==null) break;
                 System.out.println("Server: " + response);
+                
 				
 			} while (true);
 			socket.close();

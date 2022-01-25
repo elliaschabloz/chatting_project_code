@@ -72,6 +72,7 @@ public class MainWindow {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		System.out.println("in mainWindow : " + TCPServerThread.response);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -171,6 +172,26 @@ public class MainWindow {
 		
 		return tabUser;
 	};
+	
+	public void insertRow(JPanel pn, String text, String emitter) {
+		DefaultTableModel modelMessage = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"User", "Date", "Message"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Object.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			};
+		modelMessage.addRow(new Object[]{emitter,formater.format(new Date())
+				,text
+				});
+	}
 	
 	/*
 	 * Initialize the contents of the frame.

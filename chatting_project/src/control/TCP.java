@@ -23,7 +23,7 @@ public class TCP {
         try {
 			Socket userSocket = StartChattingSessionWith(hostname, 1234);
 			SendTo(userSocket, "coucou");
-			CloseChattingSessionWith(userSocket);
+			//CloseChattingSessionWith(userSocket);
 		} catch (UnknownHostException e) {
 			
 			e.printStackTrace();
