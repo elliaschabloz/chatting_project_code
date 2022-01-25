@@ -52,7 +52,7 @@ public class ConnexionGUI {
 					text = Connect(pseudo);
 					if(!text.equals("Enter an Unused Pseudo ")) {
 						udpListener.setPseudo(pseudo);
-						MainWindow window = new MainWindow(udpListener);
+						MainWindow window = new MainWindow();
 						window.frame.setVisible(true);
 						f.setVisible(false);
 					}
