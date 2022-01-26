@@ -3,6 +3,8 @@ package view;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -15,6 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,8 +78,8 @@ public class MainWindow {
 	}
 
 	public JComponent makeUI() {
-		User user1 = new User("User1","hostame1");
-		User user2 = new User("User2","hostame2");
+		User user1 = new User("titi","hostame1");
+		User user2 = new User("toto","hostame2");
 		userList.add(user1);userList.add(user2);
 		
 	    UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
@@ -297,6 +300,7 @@ public class MainWindow {
 		return tabUser;
 	}
 	
+
 	public static void insertRow(User emitter, User receiver, String message) {
 		Object[] ligne = {emitter.pseudo,formater.format(new Date()),message};
 		try {
@@ -312,6 +316,25 @@ public class MainWindow {
 //		modelMessage.addRow(new Object[]{emitter,formater.format(new Date())
 //				,message
 //				});
+	}
+	
+	public void getHystory(String userPseudo, String user2,DefaultTableModel tableMessage,int token) {
+		Connection con = null;
+		con = DataBase.initDB(con);
+		List<ArrayList<String>> historique = DataBase.QueryMsgFromDB(con, userPseudo, user2);
+		for (int i=token;i < historique.size() ;i++) {
+			String emitter = historique.get(i).get(0) ;
+			String date = historique.get(i).get(2);
+			String message = historique.get(i).get(3);
+			if(emitter.equals(userPseudo)) {
+				tableMessage.addRow(new Object[]{"Me",date,message});
+			}
+			else {
+				tableMessage.addRow(new Object[]{emitter,date,message});
+			}
+		}
+		
+		
 	}
 	
 	private void initialize() {
@@ -419,6 +442,19 @@ public class MainWindow {
 		          };
 		          // OPEN THE TAB SELECTED
 		          tabbedPane.setSelectedIndex(tabbedPane.indexOfTab(pseudo));
+		      
+		          // SEARCH OF JTABLE SECTION 
+		          Component[] comp = tabbedPane.getComponents();
+			      Component[] comp1 = ((Container) comp[1]).getComponents();
+			      Component[] comp2 = ((Container) comp1[0]).getComponents();
+			  	  Component[] comp3 = ((Container) comp2[0]).getComponents();
+			  	  Component[] comp4 = ((Container) comp3[0]).getComponents();
+			  	  
+			  	  //GET THE COUNT OF MESSAGE AND ADD THE MISSING MESSAGE FROM THE DATABASE
+			  	  int rows = ((JTable) comp4[0]).getRowCount();
+			  	  DefaultTableModel model = (DefaultTableModel) ((JTable) comp4[0]).getModel();
+			  	  getHystory(udpListener.me.pseudo,pseudo,model,rows);
+		          
 		          }
 		});
 		
