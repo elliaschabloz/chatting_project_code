@@ -17,14 +17,14 @@ public class Main {
 
 	public static void main(String args[]) throws IOException {
 	
-		Runnable runSrv =
-				new Runnable() {
-			public void run() {
-				TCP.Server(1234);
-			}
-		};
-		Thread th = new Thread(runSrv);
-		th.start();
+		/*
+		 * Appel de CONNEXION_GUI
+		 */
+		
+		/*
+		 * Si pseudo valide et connexion valide, appel de MainWindow
+		 */
+		
 		
 		
 		
