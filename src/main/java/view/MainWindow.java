@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +44,7 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.TabbedPaneLayout;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import control.TCP;
 import control.UDP;
 import model.*;
 import net.miginfocom.swing.MigLayout;
@@ -51,7 +53,6 @@ public class MainWindow {
 	public JFrame frame;
 	public static List<User> userList = new ArrayList<User>();;
 	private JTable connectedUser;
-	private JTextField messageToSend;
 	private static JTable messageViewUser;
 	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 	public static final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -60,6 +61,16 @@ public class MainWindow {
 	public MainWindow(UDP udpListener) {
 		this.udpListener = udpListener;
 		MainWindow.udpListener.start();
+
+		Runnable runSrv =
+				new Runnable() {
+			public void run() {
+				TCP.Server(1234);
+			}
+		};
+		Thread th = new Thread(runSrv);
+		th.start();
+		
 		initialize();
 	}
 
@@ -204,6 +215,8 @@ public class MainWindow {
 	
 	private static JPanel createTab(final User receiver) {
 		
+		
+		
 		JPanel tabUser = new JPanel();
 		tabUser.setLayout(new MigLayout("", "[grow]", "[300.00,grow][grow]"));
 		
@@ -229,17 +242,21 @@ public class MainWindow {
 				new Object[][] {},
 				new String[] {"User", "Date", "Message"}) 
 		;
-		receiver.tableUser= modelMessage;
+		
 //		Object[] ligne = {"tutu","oo","dzdzudi"};
 //		modelMessage.addRow(ligne);
-			
-		messageViewUser.setModel(modelMessage);
+		if(receiver.tableUser==null) {
+			receiver.tableUser= modelMessage;
+		}	
+		messageViewUser.setModel(receiver.tableUser);
 		messageViewUser.getColumnModel().getColumn(0).setPreferredWidth(50);
 		messageViewUser.getColumnModel().getColumn(0).setMinWidth(10);
 		messageViewUser.getColumnModel().getColumn(0).setMaxWidth(60);
 		messageViewUser.getColumnModel().getColumn(1).setPreferredWidth(70);
 		messageViewUser.getColumnModel().getColumn(1).setMaxWidth(75);
 		messageViewUser.setTableHeader(null);
+		
+		
 		
 		JPanel messageArea = new JPanel();
 		tabUser.add(messageArea, "cell 0 1,grow");
@@ -248,6 +265,7 @@ public class MainWindow {
 		final JTextField messageToSend = new JTextField();
 		messageArea.add(messageToSend, "cell 0 0,growx");
 		messageToSend.setColumns(10);
+		
 		
 		/*
 		 * LISTENER TO SEND A MESSAGE IN THE ACTIVE TAB 
@@ -258,11 +276,15 @@ public class MainWindow {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-			insertRow(receiver, messageToSend.getText());
-			if(messageToSend.getText().equals("close_tab")) {
-				System.out.println("remove tab");
-				tabbedPane.remove(tabbedPane.getSelectedComponent());
-			}
+			
+			insertRow(udpListener.me, receiver, messageToSend.getText());
+			
+			TCP.SendTo(receiver.socketUser, messageToSend.getText());
+			
+//			if(messageToSend.getText().equals("close_tab")) {
+//				System.out.println("remove tab");
+//				tabbedPane.remove(tabbedPane.getSelectedComponent());
+//			}
 			messageToSend.setText("");
 			
 			
@@ -275,16 +297,15 @@ public class MainWindow {
 		return tabUser;
 	}
 	
-	public static void insertRow(User receiver, String message) {
-		Object[] ligne = {"toto",formater.format(new Date()),message};
+	public static void insertRow(User emitter, User receiver, String message) {
+		Object[] ligne = {emitter.pseudo,formater.format(new Date()),message};
 		try {
 			receiver.tableUser.addRow(ligne);
 		} catch (NullPointerException e) {
-			createTab(receiver);
-			receiver.tableUser.addRow(ligne);
-		}
-		if(message=="close_tab") {
-			tabbedPane.remove(tabbedPane.getSelectedComponent());
+//			JPanel newUser = createTab(receiver);
+//			tabbedPane.add(newUser);
+			tabbedPane.addTab(emitter.pseudo,null,createTab(emitter),null);
+			emitter.tableUser.addRow(ligne);
 		}
 		
 		
@@ -386,6 +407,14 @@ public class MainWindow {
 		          }
 		          if(tabbedPane.indexOfTab(pseudo)==-1) {
 		        	  tabbedPane.addTab(pseudo,null,createTab(value),null);
+		        	 		        	 
+		        	  try {							
+		        		  value.socketUser = TCP.StartChattingSessionWith(null, 1234);
+		        	  } catch (IOException e1) {
+		        		  System.out.println("erreur bip : "+value.socketUser);
+		        		  e1.printStackTrace();
+		        	  }
+		        	  
 //		        	  tabbedPane.addTab("test", new JPanel());
 		          };
 		          // OPEN THE TAB SELECTED
@@ -467,7 +496,15 @@ public class MainWindow {
 		      int y = rect.y + (rect.height - d.height) / 2;
 		      Rectangle r = new Rectangle(x, y, d.width, d.height);
 		      if (r.contains(pt)) {
+		    	  for(User u : userList) {
+		    		  if(u.pseudo.equals(tabbedPane.getTitleAt(index))) {
+		    			  TCP.CloseChattingSessionWith(u.socketUser);
+		    		  }
+		    	  }
+		    	
 		        tabbedPane.removeTabAt(index);
+		        
+		        
 		      }
 		    }
 		    l.getView().repaint();

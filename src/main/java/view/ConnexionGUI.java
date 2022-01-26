@@ -79,7 +79,7 @@ public class ConnexionGUI {
 		String retour = "";
 		try{
         	
-        	if (!CheckPseudoUnicity(pseudo)) {
+        	if (CheckPseudoUnicity(pseudo)) {
         		//Add User to UseerList
         		udpConnect.notifyConnection(pseudo);
         		retour = "You are connected as : " + pseudo;
@@ -98,11 +98,18 @@ public class ConnexionGUI {
 	}
 	
 	private static boolean CheckPseudoUnicity(String pseudo) throws IOException {
-		boolean check= false;
+		boolean check= true;
 		//Get all user connected and verify if your pseudo is already in 
-		udpListener.connectedUsers = udpListener.getAllConnected(); 
-		check = (udpListener.connectedUsers).contains(pseudo);
-		System.out.printf("Pseudo unique : "+ !check +"\n");
+		udpListener.userList = udpListener.getAllConnected(); 
+		for(User user:udpListener.userList) {
+			System.out.println("ici");
+			if(user.pseudo.equals(pseudo)) {
+				check=false;
+				break;
+			}
+		}
+//		check = (udpListener.userList).contains(pseudo);
+		System.out.printf("Pseudo unique ? : "+ check +"\n");
 	    return check;
 	}
 	 

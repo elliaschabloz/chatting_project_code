@@ -49,6 +49,7 @@ public class TCP {
 			//send message
 	        writer.println(msg);
 			//socket.close();
+	        //AJOUTER ENVOI DANS LA DB
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -98,8 +99,9 @@ public class TCP {
 			while (true) {
 				Socket socket = serverSocket.accept();
 	            System.out.println("New client connected");
-	 
-	            new TCPServerThread(socket).start();
+	            String remoteHost = socket.getInetAddress().getHostName();
+	            
+	            new TCPServerThread(socket,remoteHost).start();
 	        }
 		} catch (IOException ex) {
 	        System.out.println("Server exception: " + ex.getMessage());

@@ -17,16 +17,21 @@ import model.*;
 
 public class UDP extends Thread  {
 	int udpPort;
-	public String userPseudo;
-	public ArrayList<String> connectedUsers;
-	//public List<Entry<String,String>> pairList;
+	//public String userPseudo;
+	public User me;
+	//public ArrayList<String> connectedUsers;
 	public List<User> userList;
 	
 	public UDP(int port,String userPseudo) {
 		this.udpPort = port;
-		this.userPseudo=userPseudo;
-		this.connectedUsers= new ArrayList<String>();
-		//this.userList = new ArrayList<User>();
+		//this.userPseudo=userPseudo;
+		//this.connectedUsers= new ArrayList<String>();
+		try {
+			this.me = new User(userPseudo,InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		this.userList = new ArrayList<User>();
 	}
 	
 	@Override
@@ -44,7 +49,10 @@ public class UDP extends Thread  {
 	}
 	
 	public void setPseudo(String pseudo) {
-		this.userPseudo=pseudo;
+		this.me.pseudo=pseudo;
+	}
+	public String getPseudo() {
+		return this.me.pseudo;
 	}
 	
 	private void sendToAll(String MsgToAll) throws IOException {		
@@ -60,7 +68,7 @@ public class UDP extends Thread  {
 	}	
 	
 	
-	public ArrayList<String> getAllConnected() throws IOException {				
+	public List<User> getAllConnected() throws IOException {				
 		
 		// PARTIE SEND MESSAGE	
 		//int BUFFER_SIZE = 300;
@@ -79,7 +87,6 @@ public class UDP extends Thread  {
 		
 		while(true) {
 			try {
-				System.out.println("dans le try");
 				Socket.receive(receiverPacket);
 				//System.out.println("remoteIP="+NetworkInterface.getByInetAddress(receiverPacket.getAddress()));
 				
@@ -89,19 +96,12 @@ public class UDP extends Thread  {
 					String hostname = receiverPacket.getAddress().getHostName();
 			        System.out.printf("msg recu :%s\n",rcv_msg);
 			        
-			        if( !this.connectedUsers.contains(pseudo)){
-						this.connectedUsers.add(pseudo);
-						
-						
-//						java.util.Map.Entry<String,String> pair =
-//								new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
-//						this.pairList.add(pair);
-						
-						User user = new User(pseudo, hostname);
-						this.userList.add(user);
-
+			        User u = new User(pseudo,hostname);
+			        
+			        if( !this.userList.contains(u)){
+						this.userList.add(u);
 					}
-					System.out.printf("utilisateur ajouté : "+this.connectedUsers+"\n");
+					System.out.printf("utilisateur ajouté : "+this.userList+"\n");
 				}
 			}
 			catch(SocketTimeoutException e){
@@ -110,11 +110,11 @@ public class UDP extends Thread  {
 		}
 				
 		Socket.close();
-		System.out.printf("Liste initiale : "+(this.connectedUsers)+"\n");
+//		System.out.printf("Liste initiale : "+(this.connectedUsers)+"\n");
 		System.out.println("Liste user initiale : "+(this.userList));
 //		System.out.println("Liste pair initiale : "+(this.pairList));
 		//list.updateListUser();
-		return this.connectedUsers;
+		return this.userList;
 	}
 
 	public void notifyConnection(String pseudo) throws IOException {
@@ -163,62 +163,50 @@ public class UDP extends Thread  {
 				//User Connected Add to user List
 				pseudo = rcv_msg.substring(11);
 				String hostname = received_Packet.getAddress().getHostName();
+				User user = new User(pseudo, hostname);
 				
-				System.out.println(this.connectedUsers);
+				System.out.println(this.userList);
 				System.out.println(pseudo);
-				if( !this.connectedUsers.contains(pseudo)){
-					this.connectedUsers.add(pseudo);
-					
-					
-					User user = new User(pseudo, hostname);
+				if( !this.userList.contains(user)){
 					this.userList.add(user);
-//					java.util.Map.Entry<String,String> pair =
-//							new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
-//					this.pairList.add(pair);
+					
 				}
-				System.out.println("Nouvelle liste : " + this.connectedUsers);
-//				System.out.println("Nouvelle pairList : "+(this.pairList));
+				System.out.println("Nouvelle liste : " + this.userList);
 				
 			}else if(token.equals("Disc")) {
 				//User Disconnected Remove from UserList
 				pseudo = rcv_msg.substring(14);
 				String hostname = received_Packet.getAddress().getHostName();
 				
-				this.connectedUsers.remove(pseudo);
+//				this.connectedUsers.remove(pseudo);
 				
 				User discUser = new User(pseudo, hostname);
 				this.userList.remove(discUser);
-//				int index = this.pairList.indexOf(pseudo);
-//				this.pairList.remove(index);
 				
-				System.out.println("Nouvelle liste : " + this.connectedUsers);
+//				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));
 				
 			}else if(token.equals("Who ")) {
 				//User Used a broadcast have to respond
-				byte[] msg_buff = ("I am "+userPseudo).getBytes();
+				byte[] msg_buff = ("I am "+me.pseudo).getBytes();
 				InetAddress target_Address = received_Packet.getAddress();
 				int target_Port = received_Packet.getPort();
-				System.out.println("Send : I am "+userPseudo+"\n");
+				System.out.println("Send : I am "+me.pseudo+"\n");
 				DatagramPacket response = new DatagramPacket(msg_buff,msg_buff.length,target_Address,target_Port);
 				socket.send(response);
 				
 			}else if(token.equals("I am")) {
 				pseudo = rcv_msg.substring(6);
 				String hostname = received_Packet.getAddress().getHostName();
+				User user = new User(pseudo, hostname);
 				
-				System.out.println("liste actuelle="+this.connectedUsers);
-				System.out.println("retour du contains="+this.connectedUsers.contains(pseudo));
-				if( !this.connectedUsers.contains(pseudo)){
-					this.connectedUsers.add(pseudo);					
+				System.out.println("liste actuelle="+this.userList);
+				System.out.println("retour du contains="+this.userList.contains(user));
+				if( !this.userList.contains(user)){
+					this.userList.add(user);					
 					
-					User user = new User(pseudo, hostname);
-					this.userList.add(user);
-//					java.util.Map.Entry<String,String> pair =
-//							new java.util.AbstractMap.SimpleEntry<>(pseudo,hostname);
-//					this.pairList.add(pair);
 				}
-				System.out.println("Nouvelle liste : " + this.connectedUsers);
+//				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));
 			}
 		}
