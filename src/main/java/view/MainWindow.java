@@ -55,8 +55,13 @@ public class MainWindow {
 	private static JTable messageViewUser;
 	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 	public static final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	public static UDP udpListener;
 
-	
+	public MainWindow(UDP udpListener) {
+		this.udpListener = udpListener;
+		MainWindow.udpListener.start();
+		initialize();
+	}
 
 	public JComponent makeUI() {
 		User user1 = new User("User1","hostame1");
@@ -121,7 +126,7 @@ public class MainWindow {
 		 JFrame f = new JFrame();
 		 f.setBounds(100, 100, 600, 480);
 		 f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);		    
-		 f.getContentPane().add(new MainWindow().makeUI());		    
+		 f.getContentPane().add(new MainWindow(udpListener).makeUI());		    
 		 //f.setSize(320, 240);		   
 		 f.setVisible(true);
 	}

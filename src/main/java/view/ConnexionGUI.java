@@ -16,60 +16,63 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;  
 
 public class ConnexionGUI {
-	JFrame frame;
+	JFrame f;
 	//public ListUser listUser;
 	static UDP udpListener = new UDP(2020,null);
 	
-	
+	public ConnexionGUI() {
+		makeUI();
+	}
 	
 	public static void main(String[] args) {  
-		 //final UDP udpListener = new UDP(2020,null);
-		//		 udpListener.start();
-		 final JFrame f=new JFrame("CONNEXION");  
-		 final JTextField tf=new JTextField();
-		 final JLabel labelMessage = new JLabel();
-		 final JLabel labelPseudo = new JLabel();
-		 labelPseudo.setBounds(45,45,80,20); 
-		 tf.setBounds(115,45, 150,20); 
-		 labelMessage.setBounds(45,70, 250,20);  
-		 labelPseudo.setText("Pseudo :");
-		 JButton b=new JButton("Connect");
-		 tf.setText("Enter your Pseudo");
-		 b.setBounds(140,110,100,30);
+
+		ConnexionGUI myConnexionGUI = new ConnexionGUI();
+		
 		 
-		 /*
-		  * Listener for the bouton connect 
-		  * 		-> if your pseudo is unique open the main Windows
-		  * 		-> else demande the user to enter an unused pseudo
-		  * 
-		  */
 		 
-		 b.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-				 String text = "";
-				 String pseudo = tf.getText();
-				 try {
+	}
+
+	public static void makeUI() {
+		
+		final JFrame f=new JFrame("CONNEXION");  		 
+		final JTextField tf=new JTextField();
+		final JLabel labelMessage = new JLabel();
+		JLabel labelPseudo = new JLabel();
+		labelPseudo.setBounds(45,45,80,20); 
+		tf.setBounds(115,45, 150,20); 
+		labelMessage.setBounds(45,70, 250,20);  
+		labelPseudo.setText("Pseudo :");
+		JButton b=new JButton("Connect");
+		tf.setText("Enter your Pseudo");
+		b.setBounds(140,110,100,30);
+		
+		f.add(b);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
+		f.setSize(360,200);  
+		f.setLayout(null);  
+		f.setVisible(true); 
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String text = "";
+				String pseudo = tf.getText();
+				try {
 					text = Connect(pseudo);
 					if(!text.equals("Enter an Unused Pseudo ")) {
 						udpListener.setPseudo(pseudo);
-						MainWindow window = new MainWindow();
+						MainWindow window = new MainWindow(udpListener);
 						window.frame.setVisible(true);
 						f.setVisible(false);
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				 labelMessage.setText(text);
-			    }
+				labelMessage.setText(text);		
+			}
 		 });
 
-		 f.add(b);f.add(tf);f.add(labelMessage);f.add(labelPseudo);
-		 f.setSize(360,200);  
-		 f.setLayout(null);  
-		 f.setVisible(true); 
-		 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		 
 	}
-
 	
 	public static String Connect(String pseudo) throws IOException {
 		UDP udpConnect = new UDP(2020,pseudo);
