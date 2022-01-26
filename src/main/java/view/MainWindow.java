@@ -294,6 +294,7 @@ public class MainWindow {
 	}
 	
 	private void initialize() {
+		UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
