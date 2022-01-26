@@ -90,7 +90,7 @@ public class MainWindow {
 		listPanel.add(connectedUser, "cell 0 0,grow");
 		
 		//create and add tab to messagePanel
-	    messagePanel.add(new JLayer<JTabbedPane>(tabbedPane, new CloseableTabbedPaneLayerUI()),"cell 0 0,grow");
+	    //messagePanel.add(new JLayer<JTabbedPane>(tabbedPane, new CloseableTabbedPaneLayerUI()),"cell 0 0,grow");
 //	    p.add(new JButton(new AbstractAction("add tab") {
 //	      @Override
 //	      public void actionPerformed(ActionEvent e) {
@@ -385,12 +385,13 @@ public class MainWindow {
 		          }
 		          if(tabbedPane.indexOfTab(pseudo)==-1) {
 		        	  tabbedPane.addTab(pseudo,null,createTab(value),null);
-		        	  //tabbedPane.addTab("test", new JPanel());
+//		        	  tabbedPane.addTab("test", new JPanel());
 		          };
 		          // OPEN THE TAB SELECTED
 		          tabbedPane.setSelectedIndex(tabbedPane.indexOfTab(pseudo));
 		          }
 		});
+		
 		
 	}
 	
