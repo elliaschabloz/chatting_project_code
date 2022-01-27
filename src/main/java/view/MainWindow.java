@@ -56,11 +56,12 @@ import net.miginfocom.swing.MigLayout;
 public class MainWindow {
 	public JFrame frame;
 	public static List<User> userList = new ArrayList<User>();
-	private JTable connectedUser;
+	public static JTable connectedUser;
 	private static JTable messageViewUser;
 	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 	public static final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	public static UDP udpListener;
+	public static JPanel userPanel;
 
 	public MainWindow(UDP udpListener) {
 		this.udpListener = udpListener;
@@ -157,7 +158,7 @@ public class MainWindow {
 		return userPanel;
 	}
 	
-	private JTable initConnectedUser(List<User> userList) {
+	public static JTable initConnectedUser(List<User> userList) {
 		connectedUser = new JTable();
 		connectedUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		connectedUser.setShowVerticalLines(false);
@@ -187,9 +188,11 @@ public class MainWindow {
 		};
 		connectedUser.setModel(modelUser);
 		for(User users : userList) {
+			System.out.println(users.pseudo);
 			modelUser.addRow(new Object[] {users.pseudo});
 		}
 		
+		userPanel.add(connectedUser, "cell 0 0,grow");
 		return connectedUser;
 	}
 	
@@ -419,14 +422,14 @@ public class MainWindow {
 		
 		// USER PANEL
 		
-		JPanel userPanel = initListPanel(splitPane);
+		userPanel = initListPanel(splitPane);
 		
 		// CONNECTED USERS: TABLE OF USERS
 		
 		
 		
 		final JTable connectedUser = initConnectedUser(userList);
-		userPanel.add(connectedUser, "cell 0 0,grow");
+		
 		
 		// USER OPTIONS		
 		
@@ -486,7 +489,7 @@ public class MainWindow {
 		        	  tabbedPane.addTab(pseudo,null,createTab(value),null);
 		        	 		        	 
 		        	  try {							
-		        		  value.socketUser = TCP.StartChattingSessionWith(null, 1234);
+		        		  value.socketUser = TCP.StartChattingSessionWith(value.getHostname(), 1234);
 		        	  } catch (IOException e1) {
 		        		  System.out.println("erreur bip : "+value.socketUser);
 		        		  e1.printStackTrace();

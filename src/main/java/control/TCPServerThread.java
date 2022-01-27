@@ -2,6 +2,7 @@ package control;
 import java.net.*;
 
 import model.User;
+import view.ConnexionGUI;
 import view.MainWindow;
 
 import java.io.*;
@@ -35,7 +36,8 @@ public class TCPServerThread extends Thread {
                 for(User u:MainWindow.userList) {
                 	if(u.getHostname().equals(this.remoteHost)) {
                 		u.socketUser = socket;
-                		MainWindow.insertRow(u,MainWindow.udpListener.me, response);
+                		
+                		ConnexionGUI.myMainWindow.insertRow(u,MainWindow.udpListener.me, response);
                 	}
                 	
                 }
@@ -43,7 +45,7 @@ public class TCPServerThread extends Thread {
 				
 			} while (true);
 			socket.close();
-			System.out.println("Socket fermé !");
+			System.out.println("Socket fermï¿½ !");
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();

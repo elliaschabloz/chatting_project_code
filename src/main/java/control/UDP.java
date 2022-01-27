@@ -169,8 +169,7 @@ public class UDP extends Thread  {
 				System.out.println(this.userList);
 				System.out.println(pseudo);
 				if( !this.userList.contains(user)){
-					this.userList.add(user);
-					
+					this.userList.add(user);					
 				}
 				System.out.println("Nouvelle liste : " + this.userList);
 				
@@ -208,8 +207,9 @@ public class UDP extends Thread  {
 					
 				}
 //				System.out.println("Nouvelle liste : " + this.connectedUsers);
-				System.out.println("Nouvelle userList : "+(this.userList));
+				System.out.println("Nouvelle userList : "+(this.userList));				
 			}
+			MainWindow.initConnectedUser(userList);
 		}
 		socket.close();
 	}

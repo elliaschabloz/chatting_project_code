@@ -19,6 +19,7 @@ public class ConnexionGUI {
 	JFrame f;
 	//public ListUser listUser;
 	static UDP udpListener = new UDP(2020,null);
+	public static MainWindow myMainWindow;
 	
 	public ConnexionGUI() {
 		makeUI();
@@ -60,8 +61,8 @@ public class ConnexionGUI {
 					text = Connect(pseudo);
 					if(!text.equals("Enter an Unused Pseudo ")) {
 						udpListener.setPseudo(pseudo);
-						MainWindow window = new MainWindow(udpListener);
-						window.frame.setVisible(true);
+						myMainWindow = new MainWindow(udpListener);
+						myMainWindow.frame.setVisible(true);
 						f.setVisible(false);
 					}
 				} catch (IOException e1) {
