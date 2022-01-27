@@ -4,10 +4,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 //
 public class DataBase {
+	
+	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 
 	
 	public static void main(String[] args) {
@@ -41,7 +44,7 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			statement.executeUpdate(
 					"INSERT INTO MESSAGE (emitter,receiver,message) VALUES ("
-					+ "'"+ emitter + "',"+"'"+receiver+ "',"+"'"+msg+"')");
+					+ "'"+ emitter + "',"+"'"+receiver+ "'," +"'"+msg+"')");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

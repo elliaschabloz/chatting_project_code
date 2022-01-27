@@ -1,5 +1,13 @@
 package control;
 import java.net.*;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.DataBase;
+import model.User;
+import view.MainWindow;
+
 import java.io.*;
 
 
@@ -50,6 +58,21 @@ public class TCP {
 	        writer.println(msg);
 			//socket.close();
 	        //AJOUTER ENVOI DANS LA DB
+	        Connection con = null;
+			con = DataBase.initDB(con);
+			User rcver=null;
+			for(User u: MainWindow.userList) {
+				if(u.socketUser.equals(socket)) {
+					rcver = u;
+					break;
+				}
+			}
+			try {
+				DataBase.addMsgToDB(con, MainWindow.udpListener.me.pseudo,rcver.pseudo,msg);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			
 			e.printStackTrace();
