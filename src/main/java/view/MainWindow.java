@@ -32,6 +32,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayer;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -318,6 +319,49 @@ public class MainWindow {
 //				});
 	}
 	
+	
+	/*
+	 * 
+	 * FONCTION USED BY OUR VIEW AND ACCESSIBLE DIRECTLY BY THE USER
+	 * 
+	 */
+	public void Disconnect() {
+		JFrame disconnectFrame = new JFrame();
+		int result = JOptionPane.showConfirmDialog(disconnectFrame,"Confirm your deconnection");		
+		if(result==0) {
+			try {
+				udpListener.notifyDisconnection(udpListener.me.pseudo);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Normalement on est deconnecte ");
+		}
+	}
+	
+	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
+		List<User> connectedUsers = MainWindow.udpListener.userList;
+		ArrayList<String> users = new ArrayList<String>();
+		
+		for (User c : connectedUsers) {
+			users.add(c.pseudo);
+		}
+		boolean check = users.contains(pseudo);
+		return check;
+	}
+	
+	private void ChangePseudo() throws IOException{
+		JFrame changePseudoFrame= new JFrame();
+		boolean check;
+		String newUserPseudo = JOptionPane.showInputDialog(changePseudoFrame, "Please enter a valid Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
+		check = CheckPseudoUnicity(newUserPseudo);
+		while(check) {
+			newUserPseudo = JOptionPane.showInputDialog(changePseudoFrame, "Please enter an unused Pseudo", "Change Pseudo", JOptionPane.QUESTION_MESSAGE);
+			check = CheckPseudoUnicity(newUserPseudo);	
+		}
+	}
+	
+	
 	public void getHystory(String userPseudo, String user2,DefaultTableModel tableMessage,int token) {
 		Connection con = null;
 		con = DataBase.initDB(con);
@@ -336,6 +380,8 @@ public class MainWindow {
 		
 		
 	}
+	
+	
 	
 	private void initialize() {
 		UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
@@ -391,23 +437,23 @@ public class MainWindow {
 		/*
 		 *  OPTION SELECTION
 		 */
-//		comboBox.addActionListener(new JComboBox () {
-//		    public void actionPerformed(ActionEvent e) {
-//		        JComboBox cb = (JComboBox)e.getSource();
-//		        String optionSelected = (String)cb.getSelectedItem();
-//		        
-//		        // OPTION CHOOSED BY THE USER
-//		        if(optionSelected.equals("Change Pseudo")) {
-//		        	try {
-//						ChangePseudo();
-//					} catch (IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//		        }else if(optionSelected.equals("Deconnection")) {
-//		        	Disconnect();
-//		        }
-//		    }});
+		comboBox.addActionListener(new JComboBox () {
+		    public void actionPerformed(ActionEvent e) {
+		        JComboBox cb = (JComboBox)e.getSource();
+		        String optionSelected = (String)cb.getSelectedItem();
+		        
+		        // OPTION CHOOSED BY THE USER
+		        if(optionSelected.equals("Change Pseudo")) {
+		        	try {
+						ChangePseudo();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        }else if(optionSelected.equals("Deconnection")) {
+		        	Disconnect();
+		        }
+		    }});
 		
 		/*
 		 *  CREATION TAB FOR A DISCUSSION
@@ -460,6 +506,14 @@ public class MainWindow {
 		
 		
 	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * */
 	
 	class MyCloseButton extends JButton {
 		  public MyCloseButton() {
