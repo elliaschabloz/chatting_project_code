@@ -22,6 +22,7 @@ public class UDP extends Thread  {
 	public User me;
 	//public ArrayList<String> connectedUsers;
 	public List<User> userList;
+	public MainWindow myMainWindow;
 	
 	public UDP(int port,String userPseudo) {
 		this.udpPort = port;
@@ -209,7 +210,7 @@ public class UDP extends Thread  {
 //				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));				
 			}
-			MainWindow.initConnectedUser(userList);
+			MainWindow.updateConnectedPanel();
 		}
 		socket.close();
 	}

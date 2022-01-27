@@ -54,17 +54,21 @@ import model.*;
 import net.miginfocom.swing.MigLayout;
 
 public class MainWindow {
-	public JFrame frame;
+	
 	public static List<User> userList = new ArrayList<User>();
+	public static UDP udpListener;
+	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
+	
+	public JFrame frame;
+	public static JPanel userPanel;
 	public static JTable connectedUser;
 	private static JTable messageViewUser;
-	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 	public static final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	public static UDP udpListener;
-	public static JPanel userPanel;
+	
+	
 
 	public MainWindow(UDP udpListener) {
-		this.udpListener = udpListener;
+		MainWindow.udpListener = udpListener;
 		MainWindow.udpListener.start();
 
 		Runnable runSrv =
@@ -319,10 +323,13 @@ public class MainWindow {
 			emitter.tableUser.addRow(ligne);
 		}
 		
-		
-//		modelMessage.addRow(new Object[]{emitter,formater.format(new Date())
-//				,message
-//				});
+	}
+	
+	public static void updateConnectedPanel() {
+		userList = udpListener.userList;
+		connectedUser = new JTable();
+		userPanel.removeAll();
+		connectedUser = initConnectedUser(userList);
 	}
 	
 	
