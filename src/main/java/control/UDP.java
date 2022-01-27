@@ -210,7 +210,7 @@ public class UDP extends Thread  {
 //				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));				
 			}
-			MainWindow.updateConnectedPanel();
+			//MainWindow.updateConnectedPanel();
 		}
 		socket.close();
 	}

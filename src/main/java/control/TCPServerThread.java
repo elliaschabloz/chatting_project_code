@@ -37,7 +37,7 @@ public class TCPServerThread extends Thread {
                 	if(u.getHostname().equals(this.remoteHost)) {
                 		u.socketUser = socket;
                 		
-                		//ConnexionGUI.myMainWindow.insertRow(u,MainWindow.udpListener.me, response);
+                		ConnexionGUI.myMainWindow.insertRow(u,MainWindow.udpListener.me, response);
                 	}
                 	
                 }

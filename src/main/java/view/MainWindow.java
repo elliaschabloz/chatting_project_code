@@ -330,6 +330,7 @@ public class MainWindow {
 		connectedUser = new JTable();
 		userPanel.removeAll();
 		connectedUser = initConnectedUser(userList);
+		tabbedPane.repaint();
 	}
 	
 	
