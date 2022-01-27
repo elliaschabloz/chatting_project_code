@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import model.*;
+import view.MainWindow;
 import model.*;
 
 /* UDP Class for Connection=CheckingPseudoUnicity in broadcast
@@ -37,7 +38,7 @@ public class UDP extends Thread  {
 	@Override
 	public void run() {
 		
-		System.out.printf("Début de l'écoute sur la socket 2020 \n");
+		System.out.printf("Dï¿½but de l'ï¿½coute sur la socket 2020 \n");
 		
 		while(true) {
 			try {
@@ -63,7 +64,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		senderSocket.send(datagramPacket);
-		System.out.println("Message envoyé : " + MsgToAll +" sur le port "+this.udpPort);
+		System.out.println("Message envoyï¿½ : " + MsgToAll +" sur le port "+this.udpPort);
 		senderSocket.close();
 	}	
 	
@@ -78,7 +79,7 @@ public class UDP extends Thread  {
 		datagramPacket.setAddress(InetAddress.getByName("255.255.255.255"));
 		datagramPacket.setPort(this.udpPort);
 		Socket.send(datagramPacket);
-		System.out.println("Message envoyé : " + "Who is connected ?" +" sur le port "+this.udpPort);
+		System.out.println("Message envoyï¿½ : " + "Who is connected ?" +" sur le port "+this.udpPort);
 		//NetworkInterface.getI
 		// PARTIE RECEIVE MESSAGE
 		int BUFFER_SIZE = 300;
@@ -101,7 +102,7 @@ public class UDP extends Thread  {
 			        if( !this.userList.contains(u)){
 						this.userList.add(u);
 					}
-					System.out.printf("utilisateur ajouté : "+this.userList+"\n");
+					System.out.printf("utilisateur ajoutï¿½ : "+this.userList+"\n");
 				}
 			}
 			catch(SocketTimeoutException e){

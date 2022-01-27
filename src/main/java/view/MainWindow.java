@@ -55,7 +55,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class MainWindow {
 	public JFrame frame;
-	public static List<User> userList = new ArrayList<User>();;
+	public static List<User> userList = new ArrayList<User>();
 	private JTable connectedUser;
 	private static JTable messageViewUser;
 	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
@@ -79,9 +79,11 @@ public class MainWindow {
 	}
 
 	public JComponent makeUI() {
-		User user1 = new User("titi","hostame1");
-		User user2 = new User("toto","hostame2");
-		userList.add(user1);userList.add(user2);
+//		User user1 = new User("titi","hostame1");
+//		User user2 = new User("toto","hostame2");
+//		userList.add(user1);userList.add(user2);
+		userList = udpListener.userList;
+		
 		
 	    UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
 	    final JTabbedPane tabbedPane = new JTabbedPane();
@@ -160,13 +162,12 @@ public class MainWindow {
 		connectedUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		connectedUser.setShowVerticalLines(false);
 		
-		User user1 = userList.get(0);
-		User user2 = userList.get(1);
+		User user1 = new User("userTest","1237.0.0.1");
+		
 		
 		DefaultTableModel modelUser =new DefaultTableModel(
 				new String[][] {
 					{user1.pseudo},
-					{user2.pseudo},
 				},
 				new String[] {"Connected Users"})
 		
@@ -185,7 +186,9 @@ public class MainWindow {
 			}
 		};
 		connectedUser.setModel(modelUser);
-		
+		for(User users : userList) {
+			modelUser.addRow(new Object[] {users.pseudo});
+		}
 		
 		return connectedUser;
 	}
@@ -384,7 +387,12 @@ public class MainWindow {
 	
 	
 	private void initialize() {
-		UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
+		
+		userList = udpListener.userList;
+		
+	    UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
+	    final JTabbedPane tabbedPane = new JTabbedPane();
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 600, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -405,9 +413,9 @@ public class MainWindow {
 
 		
 		
-		User user1 = new User("User1","hostame1");
-		User user2 = new User("User2","hostame2");
-		userList.add(user1);userList.add(user2);
+//		User user1 = new User("User1","hostame1");
+//		User user2 = new User("User2","hostame2");
+//		userList.add(user1);userList.add(user2);
 		
 		// USER PANEL
 		
