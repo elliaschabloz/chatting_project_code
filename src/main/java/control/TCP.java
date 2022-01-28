@@ -1,8 +1,6 @@
 package control;
 import java.net.*;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
 import model.DataBase;
 import model.User;
@@ -33,7 +31,6 @@ public class TCP {
 			SendTo(userSocket, "coucou");
 			//CloseChattingSessionWith(userSocket);
 		} catch (UnknownHostException e) {
-			
 			e.printStackTrace();
 		} catch (IOException e) {
 			
@@ -70,7 +67,6 @@ public class TCP {
 			try {
 				DataBase.addMsgToDB(con, MainWindow.udpListener.me.pseudo,rcver.pseudo,msg);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (IOException e) {

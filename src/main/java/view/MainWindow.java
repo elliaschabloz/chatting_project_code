@@ -83,77 +83,6 @@ public class MainWindow {
 		initialize();
 	}
 
-	public JComponent makeUI() {
-//		User user1 = new User("titi","hostame1");
-//		User user2 = new User("toto","hostame2");
-//		userList.add(user1);userList.add(user2);
-		userList = udpListener.userList;
-		
-		
-	    UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
-	    final JTabbedPane tabbedPane = new JTabbedPane();
-	    
-	    //tabbedPane.addTab("Welcome", new JPanel());
-	    
-	    //create main panel divided with a splitpane
-	    JPanel p = new JPanel(new BorderLayout());
-	    JSplitPane splitPane = new JSplitPane();
-		p.add(splitPane);
-		
-		//create and add components of splitpane
-		JPanel listPanel = initListPanel(splitPane);
-	    JPanel messagePanel = initMessagePanel(splitPane,tabbedPane);
-	    
-		splitPane.setLeftComponent(messagePanel);
-		splitPane.setRightComponent(listPanel);
-		
-		//create and add list of user to listPanel
-		final JTable connectedUser = initConnectedUser(userList);
-		listPanel.add(connectedUser, "cell 0 0,grow");
-		
-		//create and add tab to messagePanel
-	    //messagePanel.add(new JLayer<JTabbedPane>(tabbedPane, new CloseableTabbedPaneLayerUI()),"cell 0 0,grow");
-//	    p.add(new JButton(new AbstractAction("add tab") {
-//	      @Override
-//	      public void actionPerformed(ActionEvent e) {
-//	        tabbedPane.addTab("test", new JPanel());
-//	      }
-//	    }), BorderLayout.SOUTH);
-	    connectedUser.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int[] sel;
-				User value = null;
-				
-				sel = connectedUser.getSelectedRows();
-				 // CHECK IF THE TAB ALREADY OPENED
-
-		          TableModel tm = connectedUser.getModel();
-		          String pseudo = (String) tm.getValueAt(sel[0],0);
-		          for(User u : userList) {
-						if(u.pseudo == pseudo) value = u;
-		          }
-		          if(tabbedPane.indexOfTab(pseudo)==-1) {
-		        	  tabbedPane.addTab(pseudo,null,createTab(value),null);
-		        	  //tabbedPane.addTab("test", new JPanel());
-		          };
-		          // OPEN THE TAB SELECTED
-		          tabbedPane.setSelectedIndex(tabbedPane.indexOfTab(pseudo));
-		          }
-		});
-	    return p;
-	  }
-		
-	public static void main(String[] args) {
-		 JFrame f = new JFrame();
-		 f.setBounds(100, 100, 600, 480);
-		 f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);		    
-		 f.getContentPane().add(new MainWindow(udpListener).makeUI());		    
-		 //f.setSize(320, 240);		   
-		 f.setVisible(true);
-	}
-	
-	
 	
 	private JPanel initListPanel(JSplitPane splitPane) {
 		JPanel userPanel = new JPanel();	
@@ -167,7 +96,7 @@ public class MainWindow {
 		connectedUser.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		connectedUser.setShowVerticalLines(false);
 		
-		User user1 = new User("userTest","1237.0.0.1");
+		User user1 = new User("userTest","127.0.0.1");
 		
 		
 		DefaultTableModel modelUser =new DefaultTableModel(
@@ -346,7 +275,6 @@ public class MainWindow {
 			try {
 				udpListener.notifyDisconnection(udpListener.me.pseudo);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("Normalement on est deconnecte ");
@@ -384,12 +312,13 @@ public class MainWindow {
 			String emitter = historique.get(i).get(0) ;
 			String date = historique.get(i).get(2);
 			String message = historique.get(i).get(3);
-			if(emitter.equals(userPseudo)) {
-				tableMessage.addRow(new Object[]{"Me",date,message});
-			}
-			else {
-				tableMessage.addRow(new Object[]{emitter,date,message});
-			}
+			tableMessage.addRow(new Object[]{emitter,date,message});
+//			if(emitter.equals(userPseudo)) {
+//				tableMessage.addRow(new Object[]{udpListener.me.pseudo,date,message});
+//			}
+//			else {
+//				tableMessage.addRow(new Object[]{emitter,date,message});
+//			}
 		}
 		
 		
@@ -424,9 +353,9 @@ public class MainWindow {
 
 		
 		
-//		User user1 = new User("User1","hostame1");
-//		User user2 = new User("User2","hostame2");
-//		userList.add(user1);userList.add(user2);
+		User user1 = new User("User1","hostame1");
+		User user2 = new User("User2","hostame2");
+		userList.add(user1);userList.add(user2);
 		
 		// USER PANEL
 		
@@ -466,7 +395,6 @@ public class MainWindow {
 		        	try {
 						ChangePseudo();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 		        }else if(optionSelected.equals("Deconnection")) {
@@ -499,7 +427,7 @@ public class MainWindow {
 		        	  try {							
 		        		  value.socketUser = TCP.StartChattingSessionWith(value.getHostname(), 1234);
 		        	  } catch (IOException e1) {
-		        		  System.out.println("erreur bip : "+value.socketUser);
+		        		  //System.out.println("erreur bip : "+value.socketUser);
 		        		  e1.printStackTrace();
 		        	  }
 		        	  

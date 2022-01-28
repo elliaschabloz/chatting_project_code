@@ -13,27 +13,12 @@ public class DataBase {
 	static SimpleDateFormat formater = new SimpleDateFormat("h:mm a");
 
 	
-	public static void main(String[] args) {
-		Connection con = null;
-		con = initDB(con);
-		List<ArrayList<String>> historique = null;
-		try {
-			historique = QueryMsgFromDB(con,"tutu", "tata");
-			//addMsgToDB(con, "tutu","tata","Lorem Ipsum");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("historique = " + historique);
-	}
-	
 	public static Connection initDB(Connection con) {
 		try {
 			con = DriverManager.getConnection(
 					"jdbc:mysql://srv-bdens.insa-toulouse.fr:3306/tp_servlet_015",
 					"tp_servlet_015","ThooWib1");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return con;
@@ -44,9 +29,8 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			statement.executeUpdate(
 					"INSERT INTO MESSAGE (emitter,receiver,message) VALUES ("
-					+ "'"+ emitter + "',"+"'"+receiver+ "'," +"'"+msg+"')");
+					+ "'"+ emitter + "',"+"'"+receiver+"'"+formater.format(new Date())+ "'," +"'"+msg+"')");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -65,12 +49,9 @@ public class DataBase {
 				elem.add(rs.getString("receiver"));
 				elem.add(rs.getString("date"));
 				elem.add(rs.getString("message"));
-//						Arrays.asList(rs.getString("emitter"),
-//				rs.getString("receiver"),"null",rs.getString("message"));
 				historique.add(elem);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return historique;

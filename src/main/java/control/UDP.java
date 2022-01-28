@@ -18,16 +18,12 @@ import model.*;
 
 public class UDP extends Thread  {
 	int udpPort;
-	//public String userPseudo;
 	public User me;
-	//public ArrayList<String> connectedUsers;
 	public List<User> userList;
 	public MainWindow myMainWindow;
 	
 	public UDP(int port,String userPseudo) {
 		this.udpPort = port;
-		//this.userPseudo=userPseudo;
-		//this.connectedUsers= new ArrayList<String>();
 		try {
 			this.me = new User(userPseudo,InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
@@ -72,8 +68,7 @@ public class UDP extends Thread  {
 	
 	public List<User> getAllConnected() throws IOException {				
 		
-		// PARTIE SEND MESSAGE	
-		//int BUFFER_SIZE = 300;
+		// PARTIE SEND MESSAGE
 		DatagramSocket Socket = new DatagramSocket(2020);
 		byte[] data = ("Who is connected ?").getBytes();
 		DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
@@ -81,7 +76,7 @@ public class UDP extends Thread  {
 		datagramPacket.setPort(this.udpPort);
 		Socket.send(datagramPacket);
 		System.out.println("Message envoy� : " + "Who is connected ?" +" sur le port "+this.udpPort);
-		//NetworkInterface.getI
+
 		// PARTIE RECEIVE MESSAGE
 		int BUFFER_SIZE = 300;
 		DatagramPacket receiverPacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
@@ -112,10 +107,7 @@ public class UDP extends Thread  {
 		}
 				
 		Socket.close();
-//		System.out.printf("Liste initiale : "+(this.connectedUsers)+"\n");
 		System.out.println("Liste user initiale : "+(this.userList));
-//		System.out.println("Liste pair initiale : "+(this.pairList));
-		//list.updateListUser();
 		return this.userList;
 	}
 
@@ -179,12 +171,8 @@ public class UDP extends Thread  {
 				pseudo = rcv_msg.substring(14);
 				String hostname = received_Packet.getAddress().getHostName();
 				
-//				this.connectedUsers.remove(pseudo);
-				
 				User discUser = new User(pseudo, hostname);
 				this.userList.remove(discUser);
-				
-//				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));
 				
 			}else if(token.equals("Who ")) {
@@ -207,7 +195,6 @@ public class UDP extends Thread  {
 					this.userList.add(user);					
 					
 				}
-//				System.out.println("Nouvelle liste : " + this.connectedUsers);
 				System.out.println("Nouvelle userList : "+(this.userList));				
 			}
 			//MainWindow.updateConnectedPanel();

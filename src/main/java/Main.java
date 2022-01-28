@@ -21,15 +21,7 @@ public class Main {
 	
 	
 	public static void main(String args[]) throws IOException {
-		
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("h:mm a");
-//		String heure = dateFormat.format(new Date());
-//		java.sql.Time sqlTime = new java.sql.Time(new Date().getTime());
-//		System.out.println(sqlTime);
-//		System.out.println(heure);
-		
-		
-		
+	
 		ConnexionGUI myConnexionGUI = new ConnexionGUI();
 		
 //		try {
@@ -41,9 +33,7 @@ public class Main {
 //		User user1 = new User("User1","127.0.0.1");
 //		user1.socketUser = TCP.StartChattingSessionWith(null, 1234);
 //		TCP.SendTo(user1.socketUser, "coucou");
-		
-		
-		
+	
 		
 	}
 }

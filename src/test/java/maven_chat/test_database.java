@@ -1,10 +1,8 @@
 package maven_chat;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
@@ -29,10 +27,7 @@ public class test_database {
 		elem.add("tata");
 		elem.add(null);
 		elem.add("Lorem Ipsum");
-		res.add(elem);
-//		System.out.println(res);
-//		System.out.println(historique);
-//		System.out.println(historique.equals(res));
+		res.add(elem);                       
 		assertTrue("Valide",historique.equals(res));
 	}
 }
