@@ -265,7 +265,7 @@ public class MainWindow {
 	 * FONCTION USED BY OUR VIEW AND ACCESSIBLE DIRECTLY BY THE USER
 	 * 
 	 */
-	public void Disconnect() {
+	public int Disconnect() {
 		JFrame disconnectFrame = new JFrame();
 		int result = JOptionPane.showConfirmDialog(disconnectFrame,"Confirm your deconnection");		
 		if(result==0) {
@@ -276,6 +276,8 @@ public class MainWindow {
 			}
 			System.out.println("Normalement on est deconnecte ");
 		}
+		return result;
+		
 	}
 	
 	private boolean CheckPseudoUnicity(String pseudo) throws IOException {
@@ -395,7 +397,11 @@ public class MainWindow {
 						e1.printStackTrace();
 					}
 		        }else if(optionSelected.equals("Deconnection")) {
-		        	Disconnect();
+		        	if(Disconnect()==0) {
+		        		//System.exit(0);
+		        		frame.dispose();
+		        		frame.setVisible(false);
+		        	};
 		        }
 		    }});
 		
