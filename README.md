@@ -5,7 +5,7 @@ Projet de Chat System avec BDD centralisée
 Déploiement :
 	
 	Lancer dans le répertoire la commande : mvn package
-	Exécuter la commande : java -jar nomdutruc.jar
+	Exécuter la commande : java -jar projet_chat.jar
 
 Manuel d’utilisation simplifié :
 
