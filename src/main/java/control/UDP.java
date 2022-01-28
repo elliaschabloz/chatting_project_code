@@ -132,15 +132,6 @@ public class UDP extends Thread  {
 		sendToAll(oldPseudo+" changed to "+newPseudo);
 	}
 	
-	public void storeMsg(msgList history) {
-		
-	}
-	
-	public msgList getHistory(int id1, int id2) {
-		return null;
-	}
-
-	
 	
 	public void updateListUser() throws IOException {
 		

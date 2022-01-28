@@ -111,14 +111,7 @@ public class MainWindow {
 		final JTable connectedUser = initConnectedUser(userList);
 		listPanel.add(connectedUser, "cell 0 0,grow");
 		
-		//create and add tab to messagePanel
-	    //messagePanel.add(new JLayer<JTabbedPane>(tabbedPane, new CloseableTabbedPaneLayerUI()),"cell 0 0,grow");
-//	    p.add(new JButton(new AbstractAction("add tab") {
-//	      @Override
-//	      public void actionPerformed(ActionEvent e) {
-//	        tabbedPane.addTab("test", new JPanel());
-//	      }
-//	    }), BorderLayout.SOUTH);
+
 	    connectedUser.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
