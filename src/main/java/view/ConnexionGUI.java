@@ -28,7 +28,6 @@ public class ConnexionGUI {
 	public static void main(String[] args) {  
 
 		ConnexionGUI myConnexionGUI = new ConnexionGUI();
-		
 		 
 		 
 	}
